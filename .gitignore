@@ -1,0 +1,37 @@
+## .NET
+bin/
+obj/
+out/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.pidb
+*.userprefs
+*.rsp
+*.psess
+*.vsp
+*.vspx
+
+## VS/Rider/VSCode
+.vs/
+.vscode/
+.idea/
+*.DotSettings.user
+
+## Claude Code per-user
+.claude/
+
+## Logs / caches
+*.log
+TestResults/
+coverage/
+
+## Local config
+appsettings.*.Local.json
+appsettings.local.json
+**/secrets.json
+
+## OS
+Thumbs.db
+.DS_Store

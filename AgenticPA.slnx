@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AgenticPA.Agent/AgenticPA.Agent.csproj" />
+    <Project Path="src/AgenticPA.McpServer/AgenticPA.McpServer.csproj" />
+    <Project Path="src/AgenticPA.Services/AgenticPA.Services.csproj" />
+    <Project Path="src/AgenticPA.Web/AgenticPA.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/AgenticPA.Tests/AgenticPA.Tests.csproj" />
+  </Folder>
+</Solution>

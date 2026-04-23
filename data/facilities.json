@@ -1,0 +1,15 @@
+[
+  { "npi": "9990001", "name": "Capital Imaging Center",      "pos": "22", "type": "outpatient-hospital",    "inNetwork": true  },
+  { "npi": "9990002", "name": "Tallahassee ASC",             "pos": "24", "type": "ambulatory-surgery",     "inNetwork": true  },
+  { "npi": "9990003", "name": "Downtown Radiology",          "pos": "11", "type": "office",                 "inNetwork": false },
+  { "npi": "9990004", "name": "Memorial Regional Hospital",  "pos": "21", "type": "inpatient-hospital",     "inNetwork": true  },
+  { "npi": "9990005", "name": "Orange Park Diagnostic",      "pos": "22", "type": "outpatient-hospital",    "inNetwork": true  },
+  { "npi": "9990006", "name": "Sunshine Surgery Center",     "pos": "24", "type": "ambulatory-surgery",     "inNetwork": true  },
+  { "npi": "9990007", "name": "Atlantic Imaging Associates", "pos": "11", "type": "office",                 "inNetwork": true  },
+  { "npi": "9990008", "name": "Gulf Coast Medical Center",   "pos": "21", "type": "inpatient-hospital",     "inNetwork": true  },
+  { "npi": "9990009", "name": "Pinewood Outpatient Clinic",  "pos": "11", "type": "office",                 "inNetwork": true  },
+  { "npi": "9990010", "name": "Everglades Open MRI",         "pos": "11", "type": "office",                 "inNetwork": false },
+  { "npi": "9990011", "name": "Capital Imaging Jacksonville","pos": "22", "type": "outpatient-hospital",    "inNetwork": true  },
+  { "npi": "9990012", "name": "Capital Imaging Orlando",     "pos": "11", "type": "office",                 "inNetwork": true  },
+  { "npi": "9990013", "name": "Riverside Imaging",           "pos": "22", "type": "outpatient-hospital",    "inNetwork": true  }
+]

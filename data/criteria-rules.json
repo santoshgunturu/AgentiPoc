@@ -1,0 +1,107 @@
+{
+  "73721": {
+    "requiredDiagnosisPrefixes": ["M17", "S83", "M23", "M25"],
+    "requiredConservativeTreatmentWeeks": 6,
+    "validPos": ["11", "22", "24"],
+    "policyCitation": "BlueCare PPO §4.2.1 — Advanced Imaging of the Knee",
+    "policyText": "MRI of the knee requires at least 6 weeks of documented conservative treatment (physical therapy, NSAIDs, bracing, or activity modification) and a diagnosis consistent with osteoarthritis, ligamentous injury, or meniscal derangement."
+  },
+  "73722": {
+    "requiredDiagnosisPrefixes": ["M17", "S83", "M23", "M25"],
+    "requiredConservativeTreatmentWeeks": 6,
+    "validPos": ["11", "22", "24"],
+    "policyCitation": "BlueCare PPO §4.2.1 — Advanced Imaging of the Knee",
+    "policyText": "MRI of the knee with contrast follows the same criteria as 73721."
+  },
+  "73723": {
+    "requiredDiagnosisPrefixes": ["M17", "S83", "M23", "M25"],
+    "requiredConservativeTreatmentWeeks": 6,
+    "validPos": ["11", "22", "24"],
+    "policyCitation": "BlueCare PPO §4.2.1 — Advanced Imaging of the Knee",
+    "policyText": "MRI of the knee with and without contrast follows the same criteria as 73721."
+  },
+  "73221": {
+    "requiredDiagnosisPrefixes": ["M75", "S43", "M25.51", "M25.52"],
+    "requiredConservativeTreatmentWeeks": 6,
+    "validPos": ["11", "22", "24"],
+    "policyCitation": "BlueCare PPO §4.2.3 — Advanced Imaging of the Shoulder",
+    "policyText": "MRI of the shoulder requires 6 weeks of conservative treatment and a diagnosis of rotator cuff pathology, sprain, or chronic shoulder pain."
+  },
+  "72148": {
+    "requiredDiagnosisPrefixes": ["M51", "M54", "G55"],
+    "requiredConservativeTreatmentWeeks": 6,
+    "validPos": ["11", "22"],
+    "policyCitation": "BlueCare PPO §4.3.2 — Lumbar Spine MRI",
+    "policyText": "MRI of the lumbar spine requires 6 weeks of conservative treatment and a diagnosis of disc disorder, radiculopathy, or nerve root compression. Office and outpatient hospital settings only."
+  },
+  "72149": {
+    "requiredDiagnosisPrefixes": ["M51", "M54", "G55"],
+    "requiredConservativeTreatmentWeeks": 6,
+    "validPos": ["11", "22"],
+    "policyCitation": "BlueCare PPO §4.3.2 — Lumbar Spine MRI",
+    "policyText": "MRI of the lumbar spine with contrast follows the same criteria as 72148."
+  },
+  "72141": {
+    "requiredDiagnosisPrefixes": ["M50", "M54", "G55"],
+    "requiredConservativeTreatmentWeeks": 4,
+    "validPos": ["11", "22"],
+    "policyCitation": "BlueCare PPO §4.3.1 — Cervical Spine MRI",
+    "policyText": "MRI of the cervical spine requires 4 weeks of conservative treatment and a cervical disc or radiculopathy diagnosis."
+  },
+  "70553": {
+    "requiredDiagnosisPrefixes": ["G43", "R51", "C71", "I63"],
+    "requiredConservativeTreatmentWeeks": 0,
+    "validPos": ["11", "22", "21"],
+    "policyCitation": "BlueCare PPO §4.1.1 — Brain MRI with and without Contrast",
+    "policyText": "Brain MRI with and without contrast is indicated for suspected intracranial pathology. No conservative-treatment prerequisite when red-flag symptoms are documented."
+  },
+  "70551": {
+    "requiredDiagnosisPrefixes": ["G43", "R51", "C71", "I63"],
+    "requiredConservativeTreatmentWeeks": 0,
+    "validPos": ["11", "22", "21"],
+    "policyCitation": "BlueCare PPO §4.1.2 — Brain MRI without Contrast",
+    "policyText": "Brain MRI without contrast is indicated for headache workup, stroke evaluation, or suspected lesion."
+  },
+  "74177": {
+    "requiredDiagnosisPrefixes": ["R10", "K50", "K80", "C18"],
+    "requiredConservativeTreatmentWeeks": 0,
+    "validPos": ["11", "22", "21"],
+    "policyCitation": "BlueCare PPO §4.4.1 — CT Abdomen/Pelvis",
+    "policyText": "CT abdomen/pelvis with contrast is indicated for acute abdomen, suspected IBD, suspected mass, or biliary pathology."
+  },
+  "71260": {
+    "requiredDiagnosisPrefixes": ["R07", "C34", "I26", "J44"],
+    "requiredConservativeTreatmentWeeks": 0,
+    "validPos": ["11", "22", "21"],
+    "policyCitation": "BlueCare PPO §4.4.2 — CT Chest",
+    "policyText": "CT chest with contrast is indicated for acute chest pain workup, suspected pulmonary embolism, or lung mass evaluation."
+  },
+  "29881": {
+    "requiredDiagnosisPrefixes": ["S83.24", "M23"],
+    "requiredConservativeTreatmentWeeks": 8,
+    "validPos": ["22", "24"],
+    "policyCitation": "BlueCare PPO §5.1.2 — Knee Arthroscopy",
+    "policyText": "Knee arthroscopy with meniscectomy requires 8 weeks of failed conservative treatment and documented meniscal pathology."
+  },
+  "27447": {
+    "requiredDiagnosisPrefixes": ["M17"],
+    "requiredConservativeTreatmentWeeks": 12,
+    "validPos": ["21", "22"],
+    "policyCitation": "BlueCare PPO §5.1.5 — Total Knee Arthroplasty",
+    "policyText": "TKA requires 12 weeks of failed conservative treatment, documented osteoarthritis, and radiographic evidence of joint-space narrowing."
+  },
+  "63030": {
+    "requiredDiagnosisPrefixes": ["M51", "G55", "M54.16"],
+    "requiredConservativeTreatmentWeeks": 12,
+    "validPos": ["21", "22"],
+    "policyCitation": "BlueCare PPO §5.2.1 — Lumbar Discectomy",
+    "policyText": "Lumbar laminectomy/discectomy requires 12 weeks of failed conservative treatment and confirmed disc pathology or radiculopathy."
+  },
+  "93458": {
+    "requiredDiagnosisPrefixes": ["I25", "R07", "I48"],
+    "requiredConservativeTreatmentWeeks": 0,
+    "validPos": ["21", "22"],
+    "policyCitation": "BlueCare PPO §6.1.1 — Cardiac Catheterization",
+    "policyText": "Cardiac catheterization with coronary angiography is indicated for suspected coronary artery disease with positive stress test or unstable symptoms."
+  }
+}

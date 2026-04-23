@@ -1,0 +1,748 @@
+@page "/"
+@using AgenticPA.Agent
+@using AgenticPA.Agent.StateMachine
+@using AgenticPA.Web.Services
+@using AgenticPA.Agent.Skills
+@using Markdig
+@using Microsoft.AspNetCore.Components
+@using Microsoft.JSInterop
+@using System.Text.Json
+@rendermode InteractiveServer
+@inject ChatSessionState Session
+@inject Orchestrator Orchestrator
+@inject PaWorkflowEngine Engine
+@inject IJSRuntime JS
+@inject ILogger<Chat> Log
+@implements IDisposable
+
+<PageTitle>Agentic PA Intake</PageTitle>
+
+<div class="app-shell @(_showLog ? "" : "no-rail-right")">
+    <aside class="rail rail-left">
+        <div class="brand">
+            <div class="brand-logo">PA</div>
+            <div>
+                <div class="brand-name">Agentic PA Intake</div>
+                <div class="brand-sub">Prior Auth · POC</div>
+            </div>
+        </div>
+
+        <div class="rail-section-head">Workflow</div>
+        <ol class="states">
+            @foreach (var s in AllStates)
+            {
+                var status = StatusOf(s);
+                var clickable = status == "done" && s != PaState.Done;
+                <li class="state-row @status @(s == PaState.Preflight ? "preflight" : "") @(clickable ? "clickable" : "")"
+                    @onclick="@(() => (clickable ? GoBackToAsync(s) : Task.CompletedTask))"
+                    title="@(clickable ? $"Click to go back to {LabelOf(s)}" : null)">
+                    <span class="tick">@(status == "done" ? "✓" : status == "current" ? "●" : "○")</span>
+                    <span class="label">@LabelOf(s)</span>
+                    @if (status == "done" && GetSlotValue(s) is string v)
+                    {
+                        <span class="slot">@v</span>
+                    }
+                </li>
+            }
+        </ol>
+
+        <div class="buttons">
+            <button class="btn" @onclick="StartOver">Start over</button>
+            <button class="btn btn-ghost" @onclick="SeedDemo">Fill current step</button>
+            <button class="btn btn-ghost" @onclick="ExportAuditAsync">Download audit JSON</button>
+        </div>
+    </aside>
+
+    <main class="chat">
+        <header class="chat-header">
+            <div class="chat-title">
+                <h1>Prior Authorization Intake</h1>
+                <p class="subtle">The agent prepares the request. The deterministic rules engine makes the decision.</p>
+            </div>
+            <div class="chat-meta">
+                <button class="toggle-log @(_showLog ? "active" : "")" @onclick="ToggleLog" title="Show/hide the under-the-hood tool log">
+                    <span class="toggle-icon">@(_showLog ? "⌄" : "›")</span>
+                    <span>Under the hood</span>
+                </button>
+                <div class="persona-switch">
+                    <span class="persona-avatar">@Session.Persona.Initials</span>
+                    <select class="persona-select" @bind="PersonaId">
+                        @foreach (var p in Personas.All)
+                        {
+                            <option value="@p.Id">@p.Name · @p.Role</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <div class="transcript" @ref="_transcriptEl">
+            @foreach (var t in Session.Transcript)
+            {
+                @if (t.Role == "coach")
+                {
+                    <div class="coach">
+                        <span class="coach-icon">➜</span>
+                        <div class="md">@((MarkupString)RenderMarkdown(t.Content))</div>
+                    </div>
+                }
+                else
+                {
+                    <div class="bubble @(t.Role == "user" ? "bubble-user" : "bubble-agent")">
+                        @if (t.Role == "user")
+                        {
+                            <pre>@t.Content</pre>
+                        }
+                        else
+                        {
+                            <div class="md">@((MarkupString)RenderMarkdown(t.Content))</div>
+                        }
+                    </div>
+                }
+            }
+            @if (_pending)
+            {
+                <div class="bubble bubble-agent bubble-thinking">thinking…</div>
+            }
+        </div>
+
+        <div class="quick-chips">
+            @foreach (var chip in QuickChips())
+            {
+                <button class="chip chip-@chip.Kind" @onclick="@(() => SendFromChip(chip.Text))" disabled="@_pending" title="@chip.Tooltip">
+                    <span class="chip-icon">@chip.Icon</span>
+                    <span>@chip.Label</span>
+                </button>
+            }
+        </div>
+        <form class="composer" @onsubmit="SendAsync" @onsubmit:preventDefault="true">
+            <input type="text" @bind="_draft" @bind:event="oninput" placeholder="@Placeholder" disabled="@_pending" />
+            <button type="submit" class="btn btn-primary" disabled="@(_pending || string.IsNullOrWhiteSpace(_draft))">Send</button>
+        </form>
+
+        <footer class="app-footer">
+            <span>Rules v@BuildInfo.RulesVersion</span>
+            <span class="dot">·</span>
+            <span>Knowledge: @BuildInfo.KnowledgeCutoff</span>
+            <span class="dot">·</span>
+            <span>App v@BuildInfo.AppVersion</span>
+            <span class="dot">·</span>
+            <span>Deterministic rules engine — agent does not decide</span>
+        </footer>
+    </main>
+
+    @if (_showLog)
+    {
+    <aside class="rail rail-right">
+        <div class="rail-header">Under the hood</div>
+        <div class="log">
+            @foreach (var entry in Session.Log)
+            {
+                <details class="log-entry log-@entry.Kind">
+                    <summary>
+                        <span class="log-ts">@entry.Ts.ToString("HH:mm:ss")</span>
+                        <span class="log-kind">@entry.Kind</span>
+                        <span class="log-title">@entry.Title</span>
+                    </summary>
+                    @if (!string.IsNullOrWhiteSpace(entry.Detail))
+                    {
+                        <pre class="log-detail">@entry.Detail</pre>
+                    }
+                </details>
+            }
+            @if (!Session.Log.Any())
+            {
+                <div class="log-empty">No activity yet — send a message to begin.</div>
+            }
+        </div>
+    </aside>
+    }
+</div>
+
+@code {
+    private string _draft = string.Empty;
+    private bool _pending;
+    private bool _showLog;
+    private PaState? _autoAdvancedAt;
+    private bool _preflightAnnounced;
+    private bool _submitAnnounced;
+    private int _lastRenderedCount;
+    private bool _lastPendingState;
+    private ElementReference _transcriptEl;
+
+    private void ToggleLog() => _showLog = !_showLog;
+
+    private static readonly PaState[] AllStates = new[]
+    {
+        PaState.MemberPending, PaState.ProcedurePending, PaState.ReqProviderPending,
+        PaState.FacilityPending, PaState.ClinicalPending, PaState.Preflight,
+        PaState.Submit, PaState.Done
+    };
+
+    private string PersonaId
+    {
+        get => Session.Persona.Id;
+        set
+        {
+            Persona? p = Personas.All.FirstOrDefault(x => x.Id == value);
+            if (p is not null) Session.SetPersona(p);
+        }
+    }
+
+    private bool _hydrated;
+    private System.Threading.Timer? _saveTimer;
+    private static readonly JsonSerializerOptions SnapshotOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        PropertyNameCaseInsensitive = true,
+        Converters = { new System.Text.Json.Serialization.JsonStringEnumConverter() }
+    };
+
+    protected override void OnInitialized()
+    {
+        Session.Changed += OnSessionChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await HydrateAsync();
+            return;
+        }
+
+        // Auto-scroll the transcript when new bubbles arrive or the thinking indicator toggles.
+        int count = Session.Transcript.Count;
+        if (count != _lastRenderedCount || _pending != _lastPendingState)
+        {
+            _lastRenderedCount = count;
+            _lastPendingState = _pending;
+            try { await JS.InvokeVoidAsync("scrollToBottom", _transcriptEl); } catch { /* no-op */ }
+        }
+    }
+
+    private async Task HydrateAsync()
+    {
+        if (_hydrated) return;
+        _hydrated = true;
+
+        string? json = null;
+        try { json = await JS.InvokeAsync<string?>("loadSessionSnapshot"); }
+        catch (Exception ex) { Log.LogWarning(ex, "Failed to load session snapshot"); }
+
+        bool restored = false;
+        if (!string.IsNullOrWhiteSpace(json))
+        {
+            try
+            {
+                SessionSnapshot? snap = JsonSerializer.Deserialize<SessionSnapshot>(json, SnapshotOptions);
+                if (snap is not null && snap.SchemaVersion == 1)
+                {
+                    Session.LoadSnapshot(snap);
+                    restored = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.LogWarning(ex, "Failed to deserialize session snapshot; starting fresh");
+            }
+        }
+
+        if (!restored && !Session.Transcript.Any())
+        {
+            Session.AppendCoach(CoachForState(Session.Context.State, 0));
+        }
+        StateHasChanged();
+        try { await JS.InvokeVoidAsync("scrollToBottom", _transcriptEl); } catch { /* no-op */ }
+    }
+
+    public void Dispose()
+    {
+        Session.Changed -= OnSessionChanged;
+        _saveTimer?.Dispose();
+    }
+
+    private void OnSessionChanged()
+    {
+        InvokeAsync(StateHasChanged);
+        if (!_hydrated) return;
+        // Debounce 250ms so rapid updates don't hammer localStorage.
+        _saveTimer?.Dispose();
+        _saveTimer = new System.Threading.Timer(async _ => await SaveSnapshotAsync(), null, 250, System.Threading.Timeout.Infinite);
+    }
+
+    private async Task SaveSnapshotAsync()
+    {
+        try
+        {
+            string json = JsonSerializer.Serialize(Session.ToSnapshot(), SnapshotOptions);
+            await JS.InvokeVoidAsync("saveSessionSnapshot", json);
+        }
+        catch (Exception ex)
+        {
+            Log.LogWarning(ex, "Failed to save session snapshot");
+        }
+    }
+
+    private string LabelOf(PaState s) => s switch
+    {
+        PaState.MemberPending      => "Member",
+        PaState.ProcedurePending   => "Procedure",
+        PaState.ReqProviderPending => "Requesting provider",
+        PaState.FacilityPending    => "Facility",
+        PaState.ClinicalPending    => "Clinical context",
+        PaState.Preflight          => "Pre-flight",
+        PaState.Submit             => "Submit",
+        PaState.Done               => "Done",
+        _ => s.ToString()
+    };
+
+    private string StatusOf(PaState s)
+    {
+        int currentIdx = Array.IndexOf(AllStates, Session.Context.State);
+        int thisIdx = Array.IndexOf(AllStates, s);
+        if (thisIdx < currentIdx) return "done";
+        if (thisIdx == currentIdx) return "current";
+        return "future";
+    }
+
+    private string? GetSlotValue(PaState s) => s switch
+    {
+        PaState.MemberPending      => Session.Context.MemberId,
+        PaState.ProcedurePending   => Session.Context.Cpt,
+        PaState.ReqProviderPending => Session.Context.RequestingNpi,
+        PaState.FacilityPending    => Session.Context.FacilityNpi,
+        PaState.ClinicalPending    => Session.Context.Icd10,
+        PaState.Preflight          => Session.Context.PreflightResult?.Outcome,
+        PaState.Submit             => Session.Context.SubmitResult?.Outcome,
+        _                          => null
+    };
+
+    private string UrgencyLabel => Session.Context.Urgency switch
+    {
+        PaUrgency.Standard  => "Standard (72h)",
+        PaUrgency.Expedited => "Expedited (24h)",
+        PaUrgency.Retro     => "Retro",
+        _                   => "Standard"
+    };
+
+    private string UrgencyName(PaUrgency u) => u switch
+    {
+        PaUrgency.Standard  => "Standard",
+        PaUrgency.Expedited => "Expedited",
+        PaUrgency.Retro     => "Retro",
+        _                   => u.ToString()
+    };
+
+    private string UrgencyClass => Session.Context.Urgency switch
+    {
+        PaUrgency.Expedited => "urgent",
+        PaUrgency.Retro     => "retro",
+        _                   => "standard"
+    };
+
+    private string SlaRemaining
+    {
+        get
+        {
+            TimeSpan remaining = Session.SlaBudget - Session.Elapsed;
+            if (remaining <= TimeSpan.Zero) return "BREACHED";
+            if (remaining.TotalDays >= 1) return $"{(int)remaining.TotalDays}d {remaining.Hours}h";
+            return $"{remaining.Hours:00}:{remaining.Minutes:00}:{remaining.Seconds:00}";
+        }
+    }
+
+    private static string FormatElapsed(TimeSpan t) => $"{(int)t.TotalMinutes:00}:{t.Seconds:00}";
+
+    private string Placeholder => Session.Context.State switch
+    {
+        PaState.MemberPending      => "e.g. \"I need a PA for Jane Smith\"",
+        PaState.ProcedurePending   => "e.g. \"MRI left knee without contrast\"",
+        PaState.ReqProviderPending => "e.g. \"Dr. Ramirez\"",
+        PaState.FacilityPending    => "e.g. \"Capital Imaging\"",
+        PaState.ClinicalPending    => "e.g. \"M17.12, 8 weeks of PT, ice and NSAIDs\"",
+        PaState.Preflight          => "e.g. \"run preflight\"",
+        PaState.Submit             => "yes or no",
+        PaState.Done               => "anything else?",
+        _ => "type a message"
+    };
+
+    private async Task SendAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_draft) || _pending) return;
+        string message = _draft.Trim();
+        _draft = string.Empty;
+        await RunTurnAsync(message);
+    }
+
+    private async Task RunTurnAsync(string message) => await RunTurnAsync(message, silent: false);
+
+    private async Task RunTurnAsync(string message, bool silent)
+    {
+        if (!silent) Session.AppendUser(message);
+        _pending = true;
+        try
+        {
+            PaState previousState = Session.Context.State;
+            Session.AppendLog(new SessionLogEntry(DateTime.Now, "state", $"turn:{Session.Context.State}", null));
+            OrchestratorTurn turn = await Orchestrator.RunTurnAsync(Session.Context, Session.Transcript, message);
+            Session.AppendAssistant(turn.Reply);
+            if (turn.CommandApplied is not null)
+            {
+                Session.AppendLog(new SessionLogEntry(DateTime.Now, "command", turn.CommandApplied, null));
+                Session.AppendLog(new SessionLogEntry(DateTime.Now, "state", $"now:{turn.Context.State}", null));
+            }
+            // Preserve urgency when the orchestrator updates context (it resets from Initial otherwise).
+            PaUrgency urgencyToKeep = Session.Context.Urgency;
+            PaWorkflowContext ctx = turn.Context with { Urgency = urgencyToKeep };
+            Session.UpdateContext(ctx);
+
+            // Fallback: if the LLM failed to emit the command, synthesize it.
+            if (turn.CommandApplied is null && ctx.State == previousState)
+            {
+                IWorkflowCommand? synth = SynthesizeFallback(ctx.State, message, ctx);
+                if (synth is not null)
+                {
+                    try
+                    {
+                        PaWorkflowContext after = await Engine.HandleAsync(ctx, synth);
+                        ctx = after with { Urgency = urgencyToKeep };
+                        Session.UpdateContext(ctx);
+                        Session.AppendLog(new SessionLogEntry(DateTime.Now, "command", $"{synth.GetType().Name} (synthesized)", "LLM omitted the command; Chat.razor recovered it."));
+                        Session.AppendLog(new SessionLogEntry(DateTime.Now, "state", $"now:{ctx.State}", null));
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.LogWarning(ex, "Synthesized command rejected by engine");
+                    }
+                }
+            }
+
+            // Render the deterministic rules-engine outcomes directly so the operator sees them
+            // regardless of what the LLM narrated.
+            if (ctx.PreflightResult is not null && !_preflightAnnounced)
+            {
+                _preflightAnnounced = true;
+                Session.AppendAssistant(FormatRulesEvaluation(ctx.PreflightResult, "Pre-flight result"));
+            }
+            if (ctx.SubmitResult is not null && !_submitAnnounced)
+            {
+                _submitAnnounced = true;
+                Session.AppendAssistant(FormatRulesEvaluation(ctx.SubmitResult, "Final decision"));
+            }
+
+            if (ctx.State != previousState)
+            {
+                int userTurns = Session.Transcript.Count(t => t.Role == "user");
+                Session.AppendCoach(CoachForState(ctx.State, userTurns));
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.LogError(ex, "Orchestrator turn failed");
+            Session.AppendAssistant($"⚠️ Error: {ex.Message}");
+        }
+        finally
+        {
+            _pending = false;
+        }
+
+        // Auto-advance: if the new state is a slot-setting step (not Member, not Preflight/Submit)
+        // and no proposal has been shown yet, silently kick the skill so it proposes from the intake.
+        await MaybeAutoAdvanceAsync();
+    }
+
+    private static string FormatRulesEvaluation(AgenticPA.Services.Models.RulesEvaluation r, string heading)
+    {
+        string gaps = r.Gaps.Count == 0 ? "none" : string.Join(", ", r.Gaps);
+        string policy = string.IsNullOrWhiteSpace(r.PolicyCitation) ? string.Empty
+            : $"\n- **Policy:** {r.PolicyCitation}";
+        string rule = string.IsNullOrWhiteSpace(r.PolicyText) ? string.Empty
+            : $"\n- **Rule:** {r.PolicyText}";
+        return $"**{heading}:**\n- **Outcome:** {r.Outcome}\n- **Gaps:** {gaps}\n- **Notes:** {r.Explanation}{policy}{rule}";
+    }
+
+    private async Task MaybeAutoAdvanceAsync()
+    {
+        if (_pending) return;
+        PaState s = Session.Context.State;
+        if (s is not (PaState.ProcedurePending or PaState.ReqProviderPending
+                      or PaState.FacilityPending or PaState.ClinicalPending)) return;
+
+        // Only fire ONCE per visit to this state. If the user rewinds and comes back,
+        // we'll reset this flag so auto-advance can fire again.
+        if (_autoAdvancedAt == s) return;
+
+        string? lastAssistant = Session.Transcript.LastOrDefault(t => t.Role == "assistant")?.Content;
+        bool alreadyProposed = lastAssistant is not null && lastAssistant.Contains("Proposed", StringComparison.OrdinalIgnoreCase);
+        if (alreadyProposed) return;
+        // Require the first user message to look like a multi-slot intake (length > 40 chars).
+        string? firstUser = Session.Transcript.FirstOrDefault(t => t.Role == "user")?.Content;
+        if (string.IsNullOrEmpty(firstUser) || firstUser.Length < 40) return;
+
+        _autoAdvancedAt = s;
+        await RunTurnAsync("(continue using info from my first message)", silent: true);
+    }
+
+    private static bool IsAffirmative(string message)
+    {
+        string t = (message ?? string.Empty).Trim().ToLowerInvariant().Trim('.', '!', ',', ' ');
+        return t is "yes" or "y" or "yeah" or "yep" or "confirm" or "confirmed" or "correct"
+            or "ok" or "okay" or "sure" or "go ahead" or "proceed" or "that's right" or "thats right";
+    }
+
+    private IWorkflowCommand? SynthesizeFallback(PaState state, string userMessage, PaWorkflowContext ctx)
+    {
+        // Preflight & Submit have special semantics — don't require "yes" detection.
+        if (state == PaState.Preflight)
+        {
+            // Any non-empty user message at Preflight means "go ahead and dry-run".
+            if (!string.IsNullOrWhiteSpace(userMessage)) return new RunPreflightCommand();
+            return null;
+        }
+        if (state == PaState.Submit)
+        {
+            return IsAffirmative(userMessage) ? new SubmitCommand() : null;
+        }
+
+        // Slot states require affirmative from the user AND a parseable value in the last Proposed bubble.
+        if (!IsAffirmative(userMessage)) return null;
+
+        string? lastAssistant = Session.Transcript.LastOrDefault(t => t.Role == "assistant")?.Content;
+        if (lastAssistant is not null && lastAssistant.Contains("Confirmed", StringComparison.OrdinalIgnoreCase))
+        {
+            lastAssistant = Session.Transcript
+                .Where(t => t.Role == "assistant")
+                .Reverse()
+                .Skip(1)
+                .Select(t => t.Content)
+                .FirstOrDefault();
+        }
+        if (string.IsNullOrEmpty(lastAssistant)) return null;
+
+        return state switch
+        {
+            PaState.MemberPending      => TryExtract(@"Member ID:\s*(M\d+)",        lastAssistant, m => new SetMemberCommand(m)),
+            PaState.ProcedurePending   => TryExtract(@"CPT:\s*(\d{4,5})",           lastAssistant, m => new SetProcedureCommand(m)),
+            PaState.ReqProviderPending => TryExtract(@"NPI:\s*(\d{10})",            lastAssistant, m => new SetRequestingProviderCommand(m)),
+            PaState.FacilityPending    => TryExtract(@"NPI:\s*(\d{7})",             lastAssistant, m => new SetFacilityCommand(m)),
+            _                          => null
+        };
+    }
+
+    private static IWorkflowCommand? TryExtract(string pattern, string text, Func<string, IWorkflowCommand> factory)
+    {
+        System.Text.RegularExpressions.Match m = System.Text.RegularExpressions.Regex.Match(text, pattern);
+        return m.Success ? factory(m.Groups[1].Value) : null;
+    }
+
+    private async Task RunScenarioAsync(DemoScenario scenario)
+    {
+        if (_pending) return;
+        Session.Reset();
+        Session.SetUrgency(scenario.Urgency);
+        Session.AppendCoach($"**Running scenario:** {scenario.Name}. Expected outcome: **{scenario.ExpectedOutcome}**. Watch the state machine advance as each turn resolves.");
+        foreach (ScenarioStep step in scenario.Steps)
+        {
+            if (Session.Context.State != step.AtState) break;
+            await RunTurnAsync(step.UserMessage);
+        }
+    }
+
+    private async Task StartOver()
+    {
+        try { await JS.InvokeVoidAsync("clearSessionSnapshot"); } catch { /* no-op */ }
+        Session.Reset();
+        _autoAdvancedAt = null;
+        _preflightAnnounced = false;
+        _submitAnnounced = false;
+        Session.AppendCoach(CoachForState(PaState.MemberPending, 0));
+    }
+
+    private async Task GoBackToAsync(PaState target)
+    {
+        if (_pending) return;
+        if (target >= Session.Context.State) return;
+        try
+        {
+            PaState fromState = Session.Context.State;
+            PaWorkflowContext next = await Engine.HandleAsync(Session.Context, new GoToStateCommand(target));
+            PaUrgency urgency = Session.Context.Urgency;
+            Session.UpdateContext(next with { Urgency = urgency });
+            _autoAdvancedAt = null;
+            if (target <= PaState.Preflight) _preflightAnnounced = false;
+            if (target <= PaState.Submit) _submitAnnounced = false;
+            Session.AppendLog(new SessionLogEntry(DateTime.Now, "command", $"GoToStateCommand({target})", null));
+            Session.AppendLog(new SessionLogEntry(DateTime.Now, "state", $"now:{target}", null));
+            Session.AppendCoach($"↩ Returned to **{LabelOf(target)}**. Downstream values from {LabelOf(fromState)} were cleared.");
+        }
+        catch (Exception ex)
+        {
+            Log.LogError(ex, "Rewind failed");
+            Session.AppendAssistant($"⚠️ Could not go back: {ex.Message}");
+        }
+    }
+
+    private void SeedDemo()
+    {
+        _draft = SeedForCurrentState();
+    }
+
+    private record QuickChip(string Icon, string Label, string Kind, string Text, string? Tooltip = null);
+
+    private IReadOnlyList<QuickChip> QuickChips()
+    {
+        PaState s = Session.Context.State;
+        int userTurns = Session.Transcript.Count(t => t.Role == "user");
+
+        string? lastAssistant = Session.Transcript.LastOrDefault(t => t.Role == "assistant")?.Content;
+        bool lastIsProposal = lastAssistant is not null && lastAssistant.Contains("Proposed", StringComparison.OrdinalIgnoreCase);
+        bool lastIsTable = lastAssistant is not null && lastAssistant.Contains("|---");
+
+        return s switch
+        {
+            PaState.MemberPending when userTurns == 0 => new[]
+            {
+                new QuickChip("📋", "Paste sample intake", "primary", SampleIntake, "Use a full demo sentence to auto-fill every step")
+            },
+            PaState.MemberPending when lastIsProposal => new[]
+            {
+                new QuickChip("✓", "Confirm member", "primary", "yes"),
+                new QuickChip("✕", "Pick different", "secondary", "no")
+            },
+            PaState.MemberPending when lastIsTable => Array.Empty<QuickChip>(),
+            PaState.MemberPending => new[]
+            {
+                new QuickChip("📋", "Paste sample intake", "primary", SampleIntake)
+            },
+
+            PaState.ProcedurePending when lastIsProposal && !lastIsTable => new[]
+            {
+                new QuickChip("✓", "Confirm procedure", "primary", "yes"),
+                new QuickChip("✕", "Pick different", "secondary", "no")
+            },
+            PaState.ProcedurePending => Array.Empty<QuickChip>(),
+
+            PaState.ReqProviderPending when lastIsProposal && !lastIsTable => new[]
+            {
+                new QuickChip("✓", "Confirm provider", "primary", "yes"),
+                new QuickChip("✕", "Pick different", "secondary", "no")
+            },
+            PaState.ReqProviderPending => Array.Empty<QuickChip>(),
+
+            PaState.FacilityPending when lastIsProposal && !lastIsTable => new[]
+            {
+                new QuickChip("✓", "Confirm facility", "primary", "yes"),
+                new QuickChip("✕", "Pick different", "secondary", "no")
+            },
+            PaState.FacilityPending => Array.Empty<QuickChip>(),
+
+            PaState.ClinicalPending when lastIsProposal && !lastIsTable => new[]
+            {
+                new QuickChip("✓", "Confirm clinical", "primary", "yes"),
+                new QuickChip("✕", "Edit", "secondary", "no")
+            },
+            PaState.ClinicalPending => Array.Empty<QuickChip>(),
+
+            PaState.Preflight => new[]
+            {
+                new QuickChip("🔍", "Run pre-flight", "primary", "run preflight", "Dry-run the rules engine")
+            },
+            PaState.Submit => new[]
+            {
+                new QuickChip("✓", "Submit PA", "primary", "yes"),
+                new QuickChip("✕", "Cancel", "secondary", "no")
+            },
+            PaState.Done => Array.Empty<QuickChip>(),
+            _ => Array.Empty<QuickChip>()
+        };
+    }
+
+    private const string SampleIntake =
+        "PA for Jane Smith 1978-04-12, MRI left knee without contrast, Dr. Ramirez, Capital Imaging, M17.12 with 8 weeks of PT, ice and NSAIDs";
+
+    private async Task SendFromChip(string text)
+    {
+        if (_pending) return;
+        _draft = string.Empty;
+        await RunTurnAsync(text);
+    }
+
+    private async Task ExportAuditAsync()
+    {
+        var audit = new
+        {
+            exportedAt     = DateTime.UtcNow,
+            persona        = Session.Persona,
+            startedAt      = Session.StartedAt,
+            elapsedSeconds = (int)Session.Elapsed.TotalSeconds,
+            urgency        = Session.Context.Urgency.ToString(),
+            context        = Session.Context,
+            transcript     = Session.Transcript,
+            log            = Session.Log,
+            build          = new { BuildInfo.AppVersion, BuildInfo.RulesVersion, BuildInfo.KnowledgeCutoff }
+        };
+        string json = JsonSerializer.Serialize(audit, new JsonSerializerOptions { WriteIndented = true });
+        string filename = $"pa-audit-{DateTime.UtcNow:yyyyMMdd-HHmmss}.json";
+        await JS.InvokeVoidAsync("downloadText", filename, json);
+    }
+
+    private static readonly MarkdownPipeline Pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+
+    private static string RenderMarkdown(string text)
+        => Markdown.ToHtml(text ?? string.Empty, Pipeline);
+
+    private string SeedForCurrentState()
+    {
+        PaState s = Session.Context.State;
+        int userTurns = Session.Transcript.Count(t => t.Role == "user");
+
+        return s switch
+        {
+            PaState.MemberPending when userTurns == 0 =>
+                "PA for Jane Smith 1978-04-12, MRI left knee without contrast, Dr. Ramirez, Capital Imaging, M17.12 with 8 weeks of PT, ice and NSAIDs",
+            PaState.MemberPending      => "1978-04-12",
+            PaState.ProcedurePending   => "yes",
+            PaState.ReqProviderPending => "yes",
+            PaState.FacilityPending    => "yes",
+            PaState.ClinicalPending    => "yes",
+            PaState.Preflight          => "run preflight",
+            PaState.Submit             => "yes",
+            PaState.Done               => string.Empty,
+            _                          => string.Empty
+        };
+    }
+
+    private static string CoachForState(PaState state, int userTurns) => state switch
+    {
+        PaState.MemberPending when userTurns == 0 =>
+            "**Step 1 of 7 — Member.** Enter the patient's name or member ID, OR paste a full intake " +
+            "sentence and I'll extract what I can for every step.\n\n" +
+            "- Quick: *\"I need a PA for Jane Smith\"*\n" +
+            "- Full intake: *\"PA for Jane Smith 1978-04-12, MRI left knee without contrast, " +
+            "Dr. Ramirez, Capital Imaging, M17.12 with 8 weeks of PT, ice and NSAIDs\"*",
+        PaState.MemberPending =>
+            "Multiple members matched. Provide the **date of birth** (yyyy-MM-dd) to pick the right one.",
+        PaState.ProcedurePending =>
+            "**Step 2 of 7 — Procedure.** Tell me the CPT code or the procedure. For MRIs, mention contrast. " +
+            "Example: *\"MRI left knee without contrast.\"*",
+        PaState.ReqProviderPending =>
+            "**Step 3 of 7 — Requesting provider.** Who is ordering this? Name or NPI. " +
+            "Example: *\"Dr. Ramirez.\"*",
+        PaState.FacilityPending =>
+            "**Step 4 of 7 — Facility.** Where will the procedure happen? Name or NPI. " +
+            "Example: *\"Capital Imaging.\"*",
+        PaState.ClinicalPending =>
+            "**Step 5 of 7 — Clinical context.** Share the diagnosis (ICD-10), weeks of conservative treatment, and a short note. " +
+            "Example: *\"M17.12, 8 weeks of PT, ice and NSAIDs.\"*",
+        PaState.Preflight =>
+            "**Step 6 of 7 — Pre-flight.** Let's dry-run the rules engine before submitting. " +
+            "Say *\"run preflight\"*.",
+        PaState.Submit =>
+            "**Step 7 of 7 — Submit.** Review the outcome above, then type *\"yes\"* to submit or *\"no\"* to cancel.",
+        PaState.Done =>
+            "**Done.** The PA has been submitted and the rules engine has produced its decision. " +
+            "Click *Start over* for a new case.",
+        _ => string.Empty
+    };
+}

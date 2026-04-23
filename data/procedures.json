@@ -1,0 +1,22 @@
+[
+  { "cpt": "73721", "description": "MRI lower extremity without contrast",                "authRequired": true,  "bodyPart": "knee"     },
+  { "cpt": "73722", "description": "MRI lower extremity with contrast",                   "authRequired": true,  "bodyPart": "knee"     },
+  { "cpt": "73723", "description": "MRI lower extremity with and without contrast",       "authRequired": true,  "bodyPart": "knee"     },
+  { "cpt": "73221", "description": "MRI upper extremity without contrast",                "authRequired": true,  "bodyPart": "shoulder" },
+  { "cpt": "73222", "description": "MRI upper extremity with contrast",                   "authRequired": true,  "bodyPart": "shoulder" },
+  { "cpt": "72148", "description": "MRI lumbar spine without contrast",                   "authRequired": true,  "bodyPart": "spine"    },
+  { "cpt": "72149", "description": "MRI lumbar spine with contrast",                      "authRequired": true,  "bodyPart": "spine"    },
+  { "cpt": "72141", "description": "MRI cervical spine without contrast",                 "authRequired": true,  "bodyPart": "spine"    },
+  { "cpt": "70553", "description": "MRI brain with and without contrast",                 "authRequired": true,  "bodyPart": "head"     },
+  { "cpt": "70551", "description": "MRI brain without contrast",                          "authRequired": true,  "bodyPart": "head"     },
+  { "cpt": "74177", "description": "CT abdomen and pelvis with contrast",                 "authRequired": true,  "bodyPart": "abdomen"  },
+  { "cpt": "71260", "description": "CT chest with contrast",                              "authRequired": true,  "bodyPart": "chest"    },
+  { "cpt": "29881", "description": "Arthroscopy, knee, meniscectomy",                     "authRequired": true,  "bodyPart": "knee"     },
+  { "cpt": "27447", "description": "Total knee arthroplasty (TKA)",                       "authRequired": true,  "bodyPart": "knee"     },
+  { "cpt": "63030", "description": "Lumbar laminectomy/discectomy",                       "authRequired": true,  "bodyPart": "spine"    },
+  { "cpt": "93458", "description": "Cardiac catheterization with coronary angiography",   "authRequired": true,  "bodyPart": "cardiac"  },
+  { "cpt": "45378", "description": "Colonoscopy, diagnostic",                             "authRequired": false, "bodyPart": "gi"       },
+  { "cpt": "99213", "description": "Office visit, established patient, low complexity",   "authRequired": false, "bodyPart": "n/a"      },
+  { "cpt": "99214", "description": "Office visit, established patient, moderate complexity","authRequired": false,"bodyPart": "n/a"     },
+  { "cpt": "97110", "description": "Physical therapy, therapeutic exercises",             "authRequired": false, "bodyPart": "n/a"      }
+]

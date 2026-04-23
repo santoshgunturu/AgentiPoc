@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AgenticPA.Services\AgenticPA.Services.csproj" />
+    <ProjectReference Include="..\..\src\AgenticPA.McpServer\AgenticPA.McpServer.csproj" />
+    <ProjectReference Include="..\..\src\AgenticPA.Agent\AgenticPA.Agent.csproj" />
+    <ProjectReference Include="..\..\src\AgenticPA.Web\AgenticPA.Web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\data\*.json" CopyToOutputDirectory="PreserveNewest" Link="Data\%(Filename)%(Extension)" />
+  </ItemGroup>
+
+</Project>

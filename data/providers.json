@@ -1,0 +1,20 @@
+[
+  { "npi": "1111111111", "name": "Dr. Elena Ramirez",  "specialty": "Orthopedic Surgery",       "inNetwork": true,  "state": "FL" },
+  { "npi": "2222222222", "name": "Dr. Michael Chen",   "specialty": "Radiology",                "inNetwork": true,  "state": "FL" },
+  { "npi": "3333333333", "name": "Dr. Priya Patel",    "specialty": "Family Medicine",          "inNetwork": false, "state": "GA" },
+  { "npi": "4444444444", "name": "Dr. Thanh Nguyen",   "specialty": "Internal Medicine",        "inNetwork": true,  "state": "FL" },
+  { "npi": "5555555555", "name": "Dr. Jonathan Park",  "specialty": "Neurosurgery",             "inNetwork": true,  "state": "FL" },
+  { "npi": "6666666666", "name": "Dr. Anita Desai",    "specialty": "Cardiology",               "inNetwork": true,  "state": "FL" },
+  { "npi": "7777777777", "name": "Dr. Marcus Johnson", "specialty": "Orthopedic Surgery",       "inNetwork": true,  "state": "GA" },
+  { "npi": "8888888888", "name": "Dr. Rachel Kim",     "specialty": "Sports Medicine",          "inNetwork": true,  "state": "FL" },
+  { "npi": "9999999999", "name": "Dr. Linda Schwartz", "specialty": "Neurology",                "inNetwork": true,  "state": "FL" },
+  { "npi": "1010101010", "name": "Dr. Samuel Okafor",  "specialty": "Pain Management",          "inNetwork": true,  "state": "FL" },
+  { "npi": "1212121212", "name": "Dr. Kaur Gupta",     "specialty": "Utilization Management",   "inNetwork": true,  "state": "FL" },
+  { "npi": "1313131313", "name": "Dr. Steven Bhatti",  "specialty": "Interventional Radiology", "inNetwork": true,  "state": "FL" },
+  { "npi": "1414141414", "name": "Dr. Oksana Petrov",  "specialty": "Rheumatology",             "inNetwork": true,  "state": "FL" },
+  { "npi": "1515151515", "name": "Dr. Anthony Russo",  "specialty": "Gastroenterology",         "inNetwork": false, "state": "AL" },
+  { "npi": "1616161616", "name": "Dr. Yuki Tanaka",    "specialty": "Oncology",                 "inNetwork": true,  "state": "FL" },
+  { "npi": "1717171717", "name": "Dr. Carlos Ramirez", "specialty": "Sports Medicine",          "inNetwork": true,  "state": "FL" },
+  { "npi": "1818181818", "name": "Dr. Sofia Ramirez",  "specialty": "Internal Medicine",        "inNetwork": false, "state": "TX" },
+  { "npi": "1919191919", "name": "Dr. Hector Ramirez", "specialty": "Orthopedic Surgery",       "inNetwork": true,  "state": "GA" }
+]

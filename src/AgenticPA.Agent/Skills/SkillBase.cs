@@ -11,18 +11,39 @@ public abstract class SkillBase : ISkill
     protected readonly IChatClient ChatClient;
     protected readonly McpToolClient Mcp;
     protected readonly ILogger Logger;
+    protected readonly SkillRubricLoader? RubricLoader;
 
-    protected SkillBase(IChatClient chatClient, McpToolClient mcp, ILogger logger)
+    protected SkillBase(IChatClient chatClient, McpToolClient mcp, ILogger logger, SkillRubricLoader? rubricLoader = null)
     {
         ChatClient = chatClient;
         Mcp = mcp;
         Logger = logger;
+        RubricLoader = rubricLoader;
     }
 
     public abstract PaState Handles { get; }
 
+    /// <summary>
+    /// Optional rubric file (in skills/*.md). If set and the file loads, the rubric
+    /// replaces the hardcoded SystemPrompt. Falls back to SystemPrompt otherwise.
+    /// </summary>
+    protected virtual string? RubricFileName => null;
+
     protected abstract string SystemPrompt { get; }
     protected abstract string[] AllowedTools { get; }
+
+    protected string ResolveSystemPrompt()
+    {
+        if (RubricFileName is not null && RubricLoader is not null)
+        {
+            string rubric = RubricLoader.Load(RubricFileName);
+            if (!string.IsNullOrWhiteSpace(rubric) && rubric.Length > 200)
+            {
+                return rubric + "\n\n---\n\n" + SystemPrompt;
+            }
+        }
+        return SystemPrompt;
+    }
 
     public async Task<SkillResponse> HandleTurnAsync(
         PaWorkflowContext ctx,
@@ -34,7 +55,7 @@ public abstract class SkillBase : ISkill
 
         List<ChatMessage> messages = new()
         {
-            new ChatMessage(ChatRole.System, SystemPrompt + "\n\n" + ContextHint(ctx))
+            new ChatMessage(ChatRole.System, ResolveSystemPrompt() + "\n\n" + ContextHint(ctx))
         };
         foreach (ChatTurn turn in transcript)
         {

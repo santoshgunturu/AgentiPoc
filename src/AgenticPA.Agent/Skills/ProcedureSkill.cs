@@ -8,12 +8,18 @@ namespace AgenticPA.Agent.Skills;
 
 public class ProcedureSkill : SkillBase
 {
-    public ProcedureSkill(IChatClient chat, McpToolClient mcp, ILogger<ProcedureSkill> logger)
-        : base(chat, mcp, logger) { }
+    public ProcedureSkill(IChatClient chat, McpToolClient mcp, ILogger<ProcedureSkill> logger, SkillRubricLoader? rubricLoader = null)
+        : base(chat, mcp, logger, rubricLoader) { }
 
     public override PaState Handles => PaState.ProcedurePending;
 
-    protected override string[] AllowedTools => new[] { "search_procedure_codes", "check_auth_required" };
+    protected override string? RubricFileName => "procedure-search-rubric.md";
+
+    protected override string[] AllowedTools => new[]
+    {
+        "search_procedure_codes", "check_auth_required",
+        "get_procedure_rules", "check_procedure_coverage"
+    };
 
     protected override string SystemPrompt => """
     You are the Procedure Intake skill in a prior-authorization workflow.

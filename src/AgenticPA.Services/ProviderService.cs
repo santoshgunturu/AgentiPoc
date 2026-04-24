@@ -35,4 +35,21 @@ public class ProviderService : IProviderService
             string.Equals(x.Npi, npi, StringComparison.OrdinalIgnoreCase));
         return Task.FromResult(p);
     }
+
+    public Task<ProviderCredentials?> GetCredentialsAsync(string npi)
+    {
+        _store.ProviderCredentialsByNpi.TryGetValue(npi, out ProviderCredentials? creds);
+        return Task.FromResult(creds);
+    }
+
+    public Task<ProviderNetworkStatus> VerifyNetworkAsync(string npi, string planId)
+    {
+        Provider? p = _store.Providers.FirstOrDefault(x =>
+            string.Equals(x.Npi, npi, StringComparison.OrdinalIgnoreCase));
+        if (p is null)
+            return Task.FromResult(new ProviderNetworkStatus(npi, planId, false, null, null));
+        // POC heuristic: in-network if provider.InNetwork and plan exists.
+        bool planExists = _store.HealthPlans.Any(h => string.Equals(h.PlanId, planId, StringComparison.OrdinalIgnoreCase));
+        return Task.FromResult(new ProviderNetworkStatus(npi, planId, p.InNetwork && planExists, "2024-01-01", "2026-12-31"));
+    }
 }

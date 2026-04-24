@@ -22,6 +22,10 @@ out/
 ## Claude Code per-user
 .claude/
 
+## BMAD tooling (unrelated to this project)
+_bmad/
+_bmad-output/
+
 ## Logs / caches
 *.log
 TestResults/

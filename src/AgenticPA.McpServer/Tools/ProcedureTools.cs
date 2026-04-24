@@ -21,4 +21,19 @@ public static class ProcedureTools
         IProcedureService procedures,
         [Description("CPT code, e.g. 73721")] string cpt)
         => await procedures.CheckAuthRequiredAsync(cpt);
+
+    [McpServerTool(Name = "get_procedure_rules")]
+    [Description("Return contraindications, prerequisites, alternatives, and expected duration for a CPT.")]
+    public static async Task<ProcedureRule?> GetProcedureRules(
+        IProcedureService procedures,
+        [Description("CPT code")] string cpt)
+        => await procedures.GetProcedureRulesAsync(cpt);
+
+    [McpServerTool(Name = "check_procedure_coverage")]
+    [Description("Check whether a CPT is covered under a plan. Returns: covered | requires-pa | not-covered.")]
+    public static async Task<string> CheckProcedureCoverage(
+        IProcedureService procedures,
+        [Description("CPT code")] string cpt,
+        [Description("Plan id, e.g. P001")] string planId)
+        => await procedures.CheckCoverageAsync(cpt, planId);
 }

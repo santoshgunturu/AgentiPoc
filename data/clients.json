@@ -1,0 +1,12 @@
+[
+  { "clientId": "C001", "name": "BlueCare",         "state": "FL", "anthemBc": false },
+  { "clientId": "C002", "name": "Anthem BCBS",      "state": "FL", "anthemBc": true  },
+  { "clientId": "C003", "name": "Cigna",            "state": "FL", "anthemBc": false },
+  { "clientId": "C004", "name": "Medicare",         "state": "FL", "anthemBc": false },
+  { "clientId": "C005", "name": "Aetna",            "state": "FL", "anthemBc": false },
+  { "clientId": "C006", "name": "Florida Medicaid", "state": "FL", "anthemBc": false },
+  { "clientId": "C007", "name": "Humana",           "state": "FL", "anthemBc": false },
+  { "clientId": "C008", "name": "UnitedHealthcare", "state": "FL", "anthemBc": false },
+  { "clientId": "C009", "name": "Anthem BCBS GA",   "state": "GA", "anthemBc": true  },
+  { "clientId": "C010", "name": "BlueCross TX",     "state": "TX", "anthemBc": false }
+]

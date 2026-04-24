@@ -8,12 +8,18 @@ namespace AgenticPA.Agent.Skills;
 
 public class ClinicalSkill : SkillBase
 {
-    public ClinicalSkill(IChatClient chat, McpToolClient mcp, ILogger<ClinicalSkill> logger)
-        : base(chat, mcp, logger) { }
+    public ClinicalSkill(IChatClient chat, McpToolClient mcp, ILogger<ClinicalSkill> logger, SkillRubricLoader? rubricLoader = null)
+        : base(chat, mcp, logger, rubricLoader) { }
 
     public override PaState Handles => PaState.ClinicalPending;
 
-    protected override string[] AllowedTools => new[] { "search_diagnosis_codes" };
+    protected override string? RubricFileName => "clinical-context-rubric.md";
+
+    protected override string[] AllowedTools => new[]
+    {
+        "search_diagnosis_codes",
+        "search_icd10_hierarchy", "validate_icd_procedure_pairing"
+    };
 
     protected override string SystemPrompt => """
     You are the Clinical Context skill.

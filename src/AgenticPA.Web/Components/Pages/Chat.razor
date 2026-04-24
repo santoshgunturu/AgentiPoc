@@ -106,6 +106,19 @@
             }
         </div>
 
+        @if (VerificationPillModel() is { } pill)
+        {
+            <div class="verify-pill">
+                <span class="verify-label">Verification</span>
+                <span class="verify-count">@pill.VerifiedCount of @pill.Required</span>
+                @foreach (var f in pill.Fields)
+                {
+                    <span class="verify-chip @(f.Verified ? "verified" : "pending")">
+                        @(f.Verified ? "✓" : "○") @f.Name
+                    </span>
+                }
+            </div>
+        }
         <div class="quick-chips">
             @foreach (var chip in QuickChips())
             {
@@ -589,6 +602,42 @@
     }
 
     private record QuickChip(string Icon, string Label, string Kind, string Text, string? Tooltip = null);
+
+    private record VerificationPill(int VerifiedCount, int Required, IReadOnlyList<VerificationField> Fields);
+    private record VerificationField(string Name, bool Verified);
+
+    private VerificationPill? VerificationPillModel()
+    {
+        // Show a pill only at verification-relevant states where a "Proposed ..." bubble is on screen.
+        PaState s = Session.Context.State;
+        string? lastAssistant = Session.Transcript.LastOrDefault(t => t.Role == "assistant")?.Content ?? string.Empty;
+        bool lastIsProposal = lastAssistant.Contains("Proposed", StringComparison.OrdinalIgnoreCase)
+                              && !lastAssistant.Contains("|---");
+        if (!lastIsProposal) return null;
+
+        // Deduce how many fields are currently visible in the Proposed bubble — use that as "verified".
+        int detected = 0;
+        string[] fieldNames = s switch
+        {
+            PaState.MemberPending      => new[] { "Name", "DOB", "Member ID", "Address" },
+            PaState.ProcedurePending   => new[] { "CPT", "Description", "Body part", "Auth required" },
+            PaState.ReqProviderPending => new[] { "Name", "NPI", "Specialty", "State", "Network" },
+            PaState.FacilityPending    => new[] { "Name", "NPI", "POS", "Accreditation" },
+            PaState.ClinicalPending    => new[] { "Diagnosis", "PT weeks", "Notes" },
+            _                          => Array.Empty<string>()
+        };
+        if (fieldNames.Length == 0) return null;
+
+        List<VerificationField> fields = new();
+        foreach (string f in fieldNames)
+        {
+            bool present = lastAssistant.Contains(f, StringComparison.OrdinalIgnoreCase);
+            if (present) detected++;
+            fields.Add(new VerificationField(f, present));
+        }
+        int required = Math.Min(3, fieldNames.Length);
+        return new VerificationPill(detected, required, fields);
+    }
 
     private IReadOnlyList<QuickChip> QuickChips()
     {

@@ -49,4 +49,38 @@ public class FacilityService : IFacilityService
             : $"POS {fac.Pos} is not among allowed [{string.Join(", ", rule.ValidPos)}] for CPT {cpt}";
         return Task.FromResult(new PosValidation(ok, fac.Pos, rule.ValidPos, msg));
     }
+
+    public Task<FacilityCertification?> GetCertificationsAsync(string facilityNpi)
+    {
+        _store.FacilityCertificationsByNpi.TryGetValue(facilityNpi, out FacilityCertification? cert);
+        return Task.FromResult(cert);
+    }
+
+    public Task<FacilityCapabilityCheck> ValidateForProcedureAsync(string facilityNpi, string cpt)
+    {
+        if (!_store.FacilityCertificationsByNpi.TryGetValue(facilityNpi, out FacilityCertification? cert))
+        {
+            return Task.FromResult(new FacilityCapabilityCheck(false, Array.Empty<string>(), $"Facility {facilityNpi} has no certification data"));
+        }
+
+        Procedure? proc = _store.Procedures.FirstOrDefault(p =>
+            string.Equals(p.Cpt, cpt, StringComparison.OrdinalIgnoreCase));
+        if (proc is null)
+        {
+            return Task.FromResult(new FacilityCapabilityCheck(false, Array.Empty<string>(), $"CPT {cpt} not recognized"));
+        }
+
+        List<string> missing = new();
+        string desc = proc.Description.ToLowerInvariant();
+        if (desc.Contains("mri") && !cert.Capabilities.Any(c => c.Contains("MRI", StringComparison.OrdinalIgnoreCase))) missing.Add("MRI");
+        if (desc.Contains("ct")  && !cert.Capabilities.Any(c => c.Contains("CT",  StringComparison.OrdinalIgnoreCase))) missing.Add("CT");
+        if (desc.Contains("arthroscopy") && !cert.Capabilities.Any(c => c.Contains("Arthroscopy", StringComparison.OrdinalIgnoreCase))) missing.Add("Arthroscopy");
+        if (desc.Contains("catheterization") && !cert.Capabilities.Any(c => c.Contains("Cardiac Cath", StringComparison.OrdinalIgnoreCase))) missing.Add("Cardiac Cath");
+
+        bool ok = missing.Count == 0;
+        string msg = ok
+            ? $"Facility capable of performing CPT {cpt}"
+            : $"Facility missing required capabilities: {string.Join(", ", missing)}";
+        return Task.FromResult(new FacilityCapabilityCheck(ok, missing, msg));
+    }
 }

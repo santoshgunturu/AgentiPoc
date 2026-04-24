@@ -1,0 +1,86 @@
+{
+  "73721": {
+    "contraindications": ["pregnancy (rel.)", "severe claustrophobia w/o sedation plan", "incompatible implant"],
+    "prerequisites": ["6+ weeks conservative treatment", "documented persistent pain"],
+    "alternatives": ["weight-bearing X-ray", "ultrasound of knee"],
+    "expectedDurationMinutes": 45
+  },
+  "73722": {
+    "contraindications": ["pregnancy (rel.)", "severe renal insufficiency (gadolinium)", "contrast allergy"],
+    "prerequisites": ["prior 73721 showing indeterminate lesion", "suspected tumor or infection"],
+    "alternatives": ["73721 without contrast", "CT arthrogram"],
+    "expectedDurationMinutes": 60
+  },
+  "73723": {
+    "contraindications": ["pregnancy (rel.)", "contrast allergy", "severe renal insufficiency"],
+    "prerequisites": ["complex joint pathology", "pre-surgical planning"],
+    "alternatives": ["73721", "CT"],
+    "expectedDurationMinutes": 75
+  },
+  "72148": {
+    "contraindications": ["pregnancy (rel.)", "pacemaker (non-MR conditional)", "severe claustrophobia"],
+    "prerequisites": ["6+ weeks conservative treatment", "radiculopathy or persistent low back pain"],
+    "alternatives": ["lumbar X-ray", "CT lumbar"],
+    "expectedDurationMinutes": 45
+  },
+  "72149": {
+    "contraindications": ["pregnancy (rel.)", "contrast allergy", "renal insufficiency"],
+    "prerequisites": ["prior 72148 showing indeterminate lesion", "suspected infection or neoplasm"],
+    "alternatives": ["72148 without contrast"],
+    "expectedDurationMinutes": 60
+  },
+  "72141": {
+    "contraindications": ["pregnancy (rel.)", "pacemaker (non-MR conditional)"],
+    "prerequisites": ["4+ weeks conservative treatment", "cervical radiculopathy or trauma"],
+    "alternatives": ["cervical X-ray", "CT cervical"],
+    "expectedDurationMinutes": 45
+  },
+  "70551": {
+    "contraindications": ["pregnancy (rel.)", "pacemaker (non-MR conditional)"],
+    "prerequisites": ["red-flag symptoms", "focal neurologic deficit"],
+    "alternatives": ["head CT"],
+    "expectedDurationMinutes": 40
+  },
+  "70553": {
+    "contraindications": ["pregnancy (rel.)", "contrast allergy", "renal insufficiency"],
+    "prerequisites": ["suspected mass, demyelinating disease, or infection"],
+    "alternatives": ["70551 without contrast"],
+    "expectedDurationMinutes": 60
+  },
+  "74177": {
+    "contraindications": ["pregnancy", "contrast allergy", "renal insufficiency"],
+    "prerequisites": ["acute abdominal pathology or mass workup"],
+    "alternatives": ["abdominal US", "MR abdomen"],
+    "expectedDurationMinutes": 30
+  },
+  "71260": {
+    "contraindications": ["pregnancy", "contrast allergy", "renal insufficiency"],
+    "prerequisites": ["suspected PE, lung mass, or acute aortic pathology"],
+    "alternatives": ["VQ scan", "chest X-ray"],
+    "expectedDurationMinutes": 25
+  },
+  "29881": {
+    "contraindications": ["active infection", "uncontrolled bleeding disorder"],
+    "prerequisites": ["8+ weeks failed conservative treatment", "documented meniscal pathology"],
+    "alternatives": ["physical therapy"],
+    "expectedDurationMinutes": 90
+  },
+  "27447": {
+    "contraindications": ["active infection", "severe cardiovascular risk"],
+    "prerequisites": ["12+ weeks failed conservative tx", "documented joint-space narrowing"],
+    "alternatives": ["hyaluronic acid injection", "osteotomy"],
+    "expectedDurationMinutes": 150
+  },
+  "63030": {
+    "contraindications": ["active infection", "severe comorbidities"],
+    "prerequisites": ["12+ weeks failed conservative tx", "imaging-confirmed disc pathology"],
+    "alternatives": ["epidural steroid injection", "physical therapy"],
+    "expectedDurationMinutes": 120
+  },
+  "93458": {
+    "contraindications": ["active bleeding", "severe contrast allergy"],
+    "prerequisites": ["positive stress test OR unstable symptoms"],
+    "alternatives": ["CTA coronary"],
+    "expectedDurationMinutes": 90
+  }
+}

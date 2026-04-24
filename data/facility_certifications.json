@@ -1,0 +1,15 @@
+{
+  "9990001": { "accreditations": ["Joint Commission", "ACR"], "posTypes": ["22"], "capabilities": ["MRI", "CT", "X-ray", "Ultrasound"] },
+  "9990002": { "accreditations": ["Joint Commission", "AAAHC"], "posTypes": ["24"], "capabilities": ["Arthroscopy", "Endoscopy", "Anesthesia"] },
+  "9990003": { "accreditations": ["ACR"], "posTypes": ["11"], "capabilities": ["X-ray", "Ultrasound"] },
+  "9990004": { "accreditations": ["Joint Commission", "Magnet"], "posTypes": ["21"], "capabilities": ["Full inpatient", "Surgery", "MRI", "CT", "Cardiac Cath"] },
+  "9990005": { "accreditations": ["ACR"], "posTypes": ["22"], "capabilities": ["MRI", "CT", "Mammography"] },
+  "9990006": { "accreditations": ["AAAHC"], "posTypes": ["24"], "capabilities": ["Arthroscopy", "Cataract", "Pain Procedures"] },
+  "9990007": { "accreditations": ["ACR"], "posTypes": ["11"], "capabilities": ["X-ray", "Ultrasound", "MRI"] },
+  "9990008": { "accreditations": ["Joint Commission"], "posTypes": ["21"], "capabilities": ["Full inpatient", "Surgery", "ICU"] },
+  "9990009": { "accreditations": [], "posTypes": ["11"], "capabilities": ["X-ray"] },
+  "9990010": { "accreditations": ["ACR"], "posTypes": ["11"], "capabilities": ["Open MRI"] },
+  "9990011": { "accreditations": ["Joint Commission", "ACR"], "posTypes": ["22"], "capabilities": ["MRI", "CT", "Nuclear Medicine"] },
+  "9990012": { "accreditations": ["ACR"], "posTypes": ["11"], "capabilities": ["MRI", "X-ray"] },
+  "9990013": { "accreditations": ["ACR"], "posTypes": ["22"], "capabilities": ["MRI", "Ultrasound"] }
+}

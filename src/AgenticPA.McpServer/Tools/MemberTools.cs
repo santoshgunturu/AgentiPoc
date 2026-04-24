@@ -21,4 +21,31 @@ public static class MemberTools
         IMemberService members,
         [Description("Member id, e.g. M1001")] string memberId)
         => await members.GetContextAsync(memberId);
+
+    [McpServerTool(Name = "search_client_specific_members")]
+    [Description("Search members scoped to a health plan OR state. Use when you know the plan or issuing state.")]
+    public static async Task<IReadOnlyList<Member>> SearchClientSpecificMembers(
+        IMemberService members,
+        [Description("Optional first name")] string? firstName = null,
+        [Description("Optional last name")] string? lastName = null,
+        [Description("Optional DOB in yyyy-MM-dd")] string? dob = null,
+        [Description("Optional member id")] string? memberId = null,
+        [Description("Health plan name (e.g. BlueCare PPO) OR state code (e.g. FL)")] string? healthPlanOrState = null)
+        => await members.SearchClientSpecificAsync(firstName, lastName, dob, memberId, healthPlanOrState);
+
+    [McpServerTool(Name = "get_member_enrollments")]
+    [Description("Return enrollment periods for a member. Filter by dateOfService if provided.")]
+    public static async Task<IReadOnlyList<MemberEnrollment>> GetMemberEnrollments(
+        IMemberService members,
+        [Description("Member id")] string memberId,
+        [Description("Optional date of service in yyyy-MM-dd")] string? dateOfService = null)
+        => await members.GetEnrollmentsAsync(memberId, dateOfService);
+
+    [McpServerTool(Name = "search_anthem_bc_enrollments")]
+    [Description("Search the Anthem BC enrollment system (special handling). Only for Anthem BC clients.")]
+    public static async Task<IReadOnlyList<AnthemBcEnrollment>> SearchAnthemBcEnrollments(
+        IMemberService members,
+        [Description("Member id")] string memberId,
+        [Description("Anthem BC client id (e.g. C002)")] string clientId)
+        => await members.SearchAnthemBcEnrollmentsAsync(memberId, clientId);
 }

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Include="..\..\data\*.json" CopyToOutputDirectory="PreserveNewest" Link="Data\%(Filename)%(Extension)" />
+    <None Include="..\..\skills\**\*.md" CopyToOutputDirectory="PreserveNewest" Link="skills\%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
 
   <ItemGroup>

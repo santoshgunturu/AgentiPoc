@@ -8,12 +8,18 @@ namespace AgenticPA.Agent.Skills;
 
 public class FacilitySkill : SkillBase
 {
-    public FacilitySkill(IChatClient chat, McpToolClient mcp, ILogger<FacilitySkill> logger)
-        : base(chat, mcp, logger) { }
+    public FacilitySkill(IChatClient chat, McpToolClient mcp, ILogger<FacilitySkill> logger, SkillRubricLoader? rubricLoader = null)
+        : base(chat, mcp, logger, rubricLoader) { }
 
     public override PaState Handles => PaState.FacilityPending;
 
-    protected override string[] AllowedTools => new[] { "search_facilities", "validate_pos_for_cpt" };
+    protected override string? RubricFileName => "facility-search-rubric.md";
+
+    protected override string[] AllowedTools => new[]
+    {
+        "search_facilities", "validate_pos_for_cpt",
+        "get_facility_certifications", "validate_facility_for_procedure"
+    };
 
     protected override string SystemPrompt => """
     You are the Facility Intake skill.

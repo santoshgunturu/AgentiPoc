@@ -8,12 +8,14 @@ namespace AgenticPA.Agent.Skills;
 
 public class SubmitSkill : SkillBase
 {
-    public SubmitSkill(IChatClient chat, McpToolClient mcp, ILogger<SubmitSkill> logger)
-        : base(chat, mcp, logger) { }
+    public SubmitSkill(IChatClient chat, McpToolClient mcp, ILogger<SubmitSkill> logger, SkillRubricLoader? rubricLoader = null)
+        : base(chat, mcp, logger, rubricLoader) { }
 
     public override PaState Handles => PaState.Submit;
 
-    protected override string[] AllowedTools => Array.Empty<string>();
+    protected override string? RubricFileName => "submit-rubric.md";
+
+    protected override string[] AllowedTools => new[] { "audit_submission" };
 
     protected override string SystemPrompt => """
     You are the Submit skill. The user has seen the preflight outcome and is deciding whether to submit.

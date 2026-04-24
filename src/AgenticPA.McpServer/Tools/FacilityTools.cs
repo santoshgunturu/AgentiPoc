@@ -22,4 +22,19 @@ public static class FacilityTools
         [Description("Facility NPI")] string facilityNpi,
         [Description("CPT code")] string cpt)
         => await facilities.ValidatePosForCptAsync(facilityNpi, cpt);
+
+    [McpServerTool(Name = "get_facility_certifications")]
+    [Description("Return accreditations, POS types, and capabilities for a facility by NPI.")]
+    public static async Task<FacilityCertification?> GetFacilityCertifications(
+        IFacilityService facilities,
+        [Description("Facility NPI")] string facilityNpi)
+        => await facilities.GetCertificationsAsync(facilityNpi);
+
+    [McpServerTool(Name = "validate_facility_for_procedure")]
+    [Description("Check the facility has the capabilities needed for the CPT (beyond POS — e.g. MRI-capable, Arthroscopy, Cardiac Cath).")]
+    public static async Task<FacilityCapabilityCheck> ValidateFacilityForProcedure(
+        IFacilityService facilities,
+        [Description("Facility NPI")] string facilityNpi,
+        [Description("CPT code")] string cpt)
+        => await facilities.ValidateForProcedureAsync(facilityNpi, cpt);
 }

@@ -8,12 +8,14 @@ namespace AgenticPA.Agent.Skills;
 
 public class PreflightSkill : SkillBase
 {
-    public PreflightSkill(IChatClient chat, McpToolClient mcp, ILogger<PreflightSkill> logger)
-        : base(chat, mcp, logger) { }
+    public PreflightSkill(IChatClient chat, McpToolClient mcp, ILogger<PreflightSkill> logger, SkillRubricLoader? rubricLoader = null)
+        : base(chat, mcp, logger, rubricLoader) { }
 
     public override PaState Handles => PaState.Preflight;
 
-    protected override string[] AllowedTools => new[] { "preview_criteria_evaluation" };
+    protected override string? RubricFileName => "preflight-rubric.md";
+
+    protected override string[] AllowedTools => new[] { "preview_criteria_evaluation", "get_policy_text" };
 
     protected override string SystemPrompt => """
     You are the Pre-flight skill. You explain the deterministic rules-engine dry-run outcome

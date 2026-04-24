@@ -8,12 +8,18 @@ namespace AgenticPA.Agent.Skills;
 
 public class RequestingProviderSkill : SkillBase
 {
-    public RequestingProviderSkill(IChatClient chat, McpToolClient mcp, ILogger<RequestingProviderSkill> logger)
-        : base(chat, mcp, logger) { }
+    public RequestingProviderSkill(IChatClient chat, McpToolClient mcp, ILogger<RequestingProviderSkill> logger, SkillRubricLoader? rubricLoader = null)
+        : base(chat, mcp, logger, rubricLoader) { }
 
     public override PaState Handles => PaState.ReqProviderPending;
 
-    protected override string[] AllowedTools => new[] { "search_providers", "get_network_status" };
+    protected override string? RubricFileName => "provider-search-rubric.md";
+
+    protected override string[] AllowedTools => new[]
+    {
+        "search_providers", "get_network_status",
+        "get_provider_credentials", "verify_provider_network"
+    };
 
     protected override string SystemPrompt => """
     You are the Requesting Provider Intake skill.

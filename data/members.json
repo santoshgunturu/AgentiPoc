@@ -1,34 +1,322 @@
 [
-  { "memberId": "M1001", "firstName": "Jane",     "lastName": "Smith",     "dob": "1978-04-12", "plan": "BlueCare PPO",       "pcp": "Dr. Ramirez",  "coverageActive": true  },
-  { "memberId": "M1002", "firstName": "Jane",     "lastName": "Smith",     "dob": "1985-11-03", "plan": "BlueCare HMO",       "pcp": "Dr. Chen",     "coverageActive": true  },
-  { "memberId": "M1003", "firstName": "Jane",     "lastName": "Smith",     "dob": "1992-07-21", "plan": "BlueCare PPO",       "pcp": "Dr. Patel",    "coverageActive": false },
-  { "memberId": "M1004", "firstName": "John",     "lastName": "Doe",       "dob": "1965-02-28", "plan": "Medicare Advantage", "pcp": "Dr. Ramirez",  "coverageActive": true  },
-  { "memberId": "M1005", "firstName": "Maria",    "lastName": "Garcia",    "dob": "1972-09-15", "plan": "BlueCare PPO",       "pcp": "Dr. Nguyen",   "coverageActive": true  },
-  { "memberId": "M1006", "firstName": "Robert",   "lastName": "Johnson",   "dob": "1958-06-08", "plan": "Medicare Advantage", "pcp": "Dr. Ramirez",  "coverageActive": true  },
-  { "memberId": "M1007", "firstName": "Emily",    "lastName": "Williams",  "dob": "1990-03-22", "plan": "BlueCare HMO",       "pcp": "Dr. Chen",     "coverageActive": true  },
-  { "memberId": "M1008", "firstName": "Michael",  "lastName": "Brown",     "dob": "1982-12-05", "plan": "Aetna Choice POS",   "pcp": "Dr. Patel",    "coverageActive": true  },
-  { "memberId": "M1009", "firstName": "Sarah",    "lastName": "Davis",     "dob": "1995-08-17", "plan": "BlueCare PPO",       "pcp": "Dr. Nguyen",   "coverageActive": true  },
-  { "memberId": "M1010", "firstName": "David",    "lastName": "Martinez",  "dob": "1968-01-30", "plan": "Medicaid Managed",   "pcp": "Dr. Chen",     "coverageActive": true  },
-  { "memberId": "M1011", "firstName": "Jessica",  "lastName": "Hernandez", "dob": "1987-05-11", "plan": "BlueCare HMO",       "pcp": "Dr. Patel",    "coverageActive": true  },
-  { "memberId": "M1012", "firstName": "Christopher","lastName": "Lopez",   "dob": "1975-10-02", "plan": "BlueCare PPO",       "pcp": "Dr. Ramirez",  "coverageActive": true  },
-  { "memberId": "M1013", "firstName": "Amanda",   "lastName": "Gonzalez",  "dob": "1993-04-19", "plan": "Aetna Choice POS",   "pcp": "Dr. Nguyen",   "coverageActive": true  },
-  { "memberId": "M1014", "firstName": "Daniel",   "lastName": "Wilson",    "dob": "1960-11-25", "plan": "Medicare Advantage", "pcp": "Dr. Chen",     "coverageActive": true  },
-  { "memberId": "M1015", "firstName": "Ashley",   "lastName": "Anderson",  "dob": "1988-07-07", "plan": "BlueCare PPO",       "pcp": "Dr. Patel",    "coverageActive": false },
-  { "memberId": "M1016", "firstName": "Matthew",  "lastName": "Thomas",    "dob": "1979-02-14", "plan": "BlueCare HMO",       "pcp": "Dr. Ramirez",  "coverageActive": true  },
-  { "memberId": "M1017", "firstName": "Nicole",   "lastName": "Taylor",    "dob": "1991-09-28", "plan": "Medicaid Managed",   "pcp": "Dr. Nguyen",   "coverageActive": true  },
-  { "memberId": "M1018", "firstName": "Joshua",   "lastName": "Moore",     "dob": "1963-05-16", "plan": "Medicare Advantage", "pcp": "Dr. Chen",     "coverageActive": true  },
-  { "memberId": "M1019", "firstName": "Stephanie","lastName": "Jackson",   "dob": "1984-12-23", "plan": "Aetna Choice POS",   "pcp": "Dr. Ramirez",  "coverageActive": true  },
-  { "memberId": "M1020", "firstName": "Andrew",   "lastName": "White",     "dob": "1996-03-09", "plan": "BlueCare PPO",       "pcp": "Dr. Patel",    "coverageActive": true  },
-  { "memberId": "M1021", "firstName": "Melissa",  "lastName": "Harris",    "dob": "1971-08-31", "plan": "BlueCare HMO",       "pcp": "Dr. Nguyen",   "coverageActive": true  },
-  { "memberId": "M1022", "firstName": "Brian",    "lastName": "Martin",    "dob": "1955-04-04", "plan": "Medicare Advantage", "pcp": "Dr. Chen",     "coverageActive": true  },
-  { "memberId": "M1023", "firstName": "Rachel",   "lastName": "Thompson",  "dob": "1989-06-26", "plan": "BlueCare PPO",       "pcp": "Dr. Ramirez",  "coverageActive": true  },
-  { "memberId": "M1024", "firstName": "Kevin",    "lastName": "Lee",       "dob": "1974-10-18", "plan": "Aetna Choice POS",   "pcp": "Dr. Patel",    "coverageActive": true  },
-  { "memberId": "M1025", "firstName": "Rebecca",  "lastName": "Clark",     "dob": "1997-01-11", "plan": "BlueCare HMO",       "pcp": "Dr. Nguyen",   "coverageActive": true  },
-  { "memberId": "M1026", "firstName": "Steven",   "lastName": "Rodriguez", "dob": "1966-07-14", "plan": "Medicaid Managed",   "pcp": "Dr. Chen",     "coverageActive": false },
-  { "memberId": "M1027", "firstName": "Laura",    "lastName": "Lewis",     "dob": "1983-11-20", "plan": "BlueCare PPO",       "pcp": "Dr. Ramirez",  "coverageActive": true  },
-  { "memberId": "M1028", "firstName": "Thomas",   "lastName": "Walker",    "dob": "1957-03-08", "plan": "Medicare Advantage", "pcp": "Dr. Patel",    "coverageActive": true  },
-  { "memberId": "M1029", "firstName": "Michelle", "lastName": "Hall",      "dob": "1994-05-29", "plan": "BlueCare HMO",       "pcp": "Dr. Nguyen",   "coverageActive": true  },
-  { "memberId": "M1030", "firstName": "Paul",     "lastName": "Allen",     "dob": "1962-09-03", "plan": "Aetna Choice POS",   "pcp": "Dr. Chen",     "coverageActive": true  },
-  { "memberId": "M1031", "firstName": "Kimberly", "lastName": "Young",     "dob": "1981-02-21", "plan": "BlueCare PPO",       "pcp": "Dr. Ramirez",  "coverageActive": true  },
-  { "memberId": "M1032", "firstName": "Charles",  "lastName": "King",      "dob": "1969-12-12", "plan": "Medicare Advantage", "pcp": "Dr. Patel",    "coverageActive": true  }
+  {
+    "memberId": "M1001", "firstName": "Jane", "middleName": "Marie", "lastName": "Smith",
+    "dob": "1978-04-12", "ssn": "XXX-XX-4321",
+    "address": { "street": "123 Main St", "city": "Tallahassee", "state": "FL", "zip": "32301" },
+    "plan": "BlueCare PPO", "planId": "P001", "clientId": "C001",
+    "pcp": "Dr. Ramirez", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P001", "effectiveDate": "2024-01-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1002", "firstName": "Jane", "middleName": "Louise", "lastName": "Smith",
+    "dob": "1985-11-03", "ssn": "XXX-XX-5432",
+    "address": { "street": "45 Oak Ave", "city": "Jacksonville", "state": "FL", "zip": "32202" },
+    "plan": "BlueCare HMO", "planId": "P002", "clientId": "C001",
+    "pcp": "Dr. Chen", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P002", "effectiveDate": "2023-06-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1003", "firstName": "Jane", "middleName": null, "lastName": "Smith",
+    "dob": "1992-07-21", "ssn": "XXX-XX-6543",
+    "address": { "street": "789 Pine Rd", "city": "Miami", "state": "FL", "zip": "33101" },
+    "plan": "BlueCare PPO", "planId": "P001", "clientId": "C001",
+    "pcp": "Dr. Patel", "coverageActive": false,
+    "enrollments": [
+      { "planId": "P001", "effectiveDate": "2020-01-01", "termDate": "2024-03-31", "status": "Termed" }
+    ]
+  },
+  {
+    "memberId": "M1004", "firstName": "John", "middleName": "Robert", "lastName": "Doe",
+    "dob": "1965-02-28", "ssn": "XXX-XX-7654",
+    "address": { "street": "222 Elm St", "city": "Tallahassee", "state": "FL", "zip": "32304" },
+    "plan": "Medicare Advantage", "planId": "P010", "clientId": "C004",
+    "pcp": "Dr. Ramirez", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P010", "effectiveDate": "2022-01-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1005", "firstName": "Maria", "middleName": "Elena", "lastName": "Garcia",
+    "dob": "1972-09-15", "ssn": "XXX-XX-8765",
+    "address": { "street": "901 Spruce Dr", "city": "Orlando", "state": "FL", "zip": "32801" },
+    "plan": "BlueCare PPO", "planId": "P001", "clientId": "C001",
+    "pcp": "Dr. Nguyen", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P001", "effectiveDate": "2023-01-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1006", "firstName": "Robert", "middleName": "James", "lastName": "Johnson",
+    "dob": "1958-06-08", "ssn": "XXX-XX-9876",
+    "address": { "street": "33 Cedar Ln", "city": "Tampa", "state": "FL", "zip": "33602" },
+    "plan": "Medicare Advantage", "planId": "P010", "clientId": "C004",
+    "pcp": "Dr. Ramirez", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P010", "effectiveDate": "2021-01-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1007", "firstName": "Emily", "middleName": "Rose", "lastName": "Williams",
+    "dob": "1990-03-22", "ssn": "XXX-XX-1098",
+    "address": { "street": "12 Birch Blvd", "city": "Gainesville", "state": "FL", "zip": "32601" },
+    "plan": "BlueCare HMO", "planId": "P002", "clientId": "C001",
+    "pcp": "Dr. Chen", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P002", "effectiveDate": "2024-01-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1008", "firstName": "Michael", "middleName": "Anthony", "lastName": "Brown",
+    "dob": "1982-12-05", "ssn": "XXX-XX-2109",
+    "address": { "street": "567 Maple Way", "city": "St. Petersburg", "state": "FL", "zip": "33701" },
+    "plan": "Aetna Choice POS", "planId": "P020", "clientId": "C005",
+    "pcp": "Dr. Patel", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P020", "effectiveDate": "2023-07-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1009", "firstName": "Sarah", "middleName": "Jane", "lastName": "Davis",
+    "dob": "1995-08-17", "ssn": "XXX-XX-3210",
+    "address": { "street": "808 Willow Ct", "city": "Tallahassee", "state": "FL", "zip": "32303" },
+    "plan": "BlueCare PPO", "planId": "P001", "clientId": "C001",
+    "pcp": "Dr. Nguyen", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P001", "effectiveDate": "2024-06-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1010", "firstName": "David", "middleName": "Lee", "lastName": "Martinez",
+    "dob": "1968-01-30", "ssn": "XXX-XX-4321",
+    "address": { "street": "71 Palm St", "city": "Fort Lauderdale", "state": "FL", "zip": "33301" },
+    "plan": "Medicaid Managed", "planId": "P030", "clientId": "C006",
+    "pcp": "Dr. Chen", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P030", "effectiveDate": "2023-01-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1011", "firstName": "Jessica", "middleName": "Marie", "lastName": "Hernandez",
+    "dob": "1987-05-11", "ssn": "XXX-XX-5432",
+    "address": { "street": "240 Magnolia Pl", "city": "Sarasota", "state": "FL", "zip": "34236" },
+    "plan": "BlueCare HMO", "planId": "P002", "clientId": "C001",
+    "pcp": "Dr. Patel", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P002", "effectiveDate": "2024-03-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1012", "firstName": "Christopher", "middleName": "Paul", "lastName": "Lopez",
+    "dob": "1975-10-02", "ssn": "XXX-XX-6543",
+    "address": { "street": "19 Bay Dr", "city": "Pensacola", "state": "FL", "zip": "32501" },
+    "plan": "BlueCare PPO", "planId": "P001", "clientId": "C001",
+    "pcp": "Dr. Ramirez", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P001", "effectiveDate": "2022-01-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1013", "firstName": "Amanda", "middleName": "Beth", "lastName": "Gonzalez",
+    "dob": "1993-04-19", "ssn": "XXX-XX-7654",
+    "address": { "street": "505 Ridge Rd", "city": "Tallahassee", "state": "FL", "zip": "32308" },
+    "plan": "Aetna Choice POS", "planId": "P020", "clientId": "C005",
+    "pcp": "Dr. Nguyen", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P020", "effectiveDate": "2023-09-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1014", "firstName": "Daniel", "middleName": "Eric", "lastName": "Wilson",
+    "dob": "1960-11-25", "ssn": "XXX-XX-8765",
+    "address": { "street": "88 Sand Dune Ln", "city": "Destin", "state": "FL", "zip": "32541" },
+    "plan": "Medicare Advantage", "planId": "P010", "clientId": "C004",
+    "pcp": "Dr. Chen", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P010", "effectiveDate": "2021-01-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1015", "firstName": "Ashley", "middleName": "Nicole", "lastName": "Anderson",
+    "dob": "1988-07-07", "ssn": "XXX-XX-9876",
+    "address": { "street": "1200 Ocean Blvd", "city": "Miami Beach", "state": "FL", "zip": "33139" },
+    "plan": "BlueCare PPO", "planId": "P001", "clientId": "C001",
+    "pcp": "Dr. Patel", "coverageActive": false,
+    "enrollments": [
+      { "planId": "P001", "effectiveDate": "2019-01-01", "termDate": "2023-12-31", "status": "Termed" }
+    ]
+  },
+  {
+    "memberId": "M1016", "firstName": "Matthew", "middleName": "David", "lastName": "Thomas",
+    "dob": "1979-02-14", "ssn": "XXX-XX-1098",
+    "address": { "street": "66 Hillside Dr", "city": "Naples", "state": "FL", "zip": "34102" },
+    "plan": "BlueCare HMO", "planId": "P002", "clientId": "C001",
+    "pcp": "Dr. Ramirez", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P002", "effectiveDate": "2024-01-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1017", "firstName": "Nicole", "middleName": "Lynn", "lastName": "Taylor",
+    "dob": "1991-09-28", "ssn": "XXX-XX-2109",
+    "address": { "street": "700 Central Ave", "city": "St. Petersburg", "state": "FL", "zip": "33701" },
+    "plan": "Medicaid Managed", "planId": "P030", "clientId": "C006",
+    "pcp": "Dr. Nguyen", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P030", "effectiveDate": "2023-04-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1018", "firstName": "Joshua", "middleName": "Ryan", "lastName": "Moore",
+    "dob": "1963-05-16", "ssn": "XXX-XX-3210",
+    "address": { "street": "143 Sunrise Dr", "city": "Cape Coral", "state": "FL", "zip": "33904" },
+    "plan": "Medicare Advantage", "planId": "P010", "clientId": "C004",
+    "pcp": "Dr. Chen", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P010", "effectiveDate": "2022-01-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1019", "firstName": "Stephanie", "middleName": "Ann", "lastName": "Jackson",
+    "dob": "1984-12-23", "ssn": "XXX-XX-4321",
+    "address": { "street": "25 River Rd", "city": "Tallahassee", "state": "FL", "zip": "32310" },
+    "plan": "Aetna Choice POS", "planId": "P020", "clientId": "C005",
+    "pcp": "Dr. Ramirez", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P020", "effectiveDate": "2023-11-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1020", "firstName": "Andrew", "middleName": "Scott", "lastName": "White",
+    "dob": "1996-03-09", "ssn": "XXX-XX-5432",
+    "address": { "street": "300 Tech Park Dr", "city": "Melbourne", "state": "FL", "zip": "32934" },
+    "plan": "BlueCare PPO", "planId": "P001", "clientId": "C001",
+    "pcp": "Dr. Patel", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P001", "effectiveDate": "2024-08-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1021", "firstName": "Melissa", "middleName": "Sue", "lastName": "Harris",
+    "dob": "1971-08-31", "ssn": "XXX-XX-6543",
+    "address": { "street": "58 Forest Pl", "city": "Orlando", "state": "FL", "zip": "32806" },
+    "plan": "BlueCare HMO", "planId": "P002", "clientId": "C001",
+    "pcp": "Dr. Nguyen", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P002", "effectiveDate": "2023-06-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1022", "firstName": "Brian", "middleName": "Charles", "lastName": "Martin",
+    "dob": "1955-04-04", "ssn": "XXX-XX-7654",
+    "address": { "street": "914 Stadium Dr", "city": "Gainesville", "state": "FL", "zip": "32611" },
+    "plan": "Anthem BCBS", "planId": "P040", "clientId": "C002",
+    "pcp": "Dr. Chen", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P040", "effectiveDate": "2022-01-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1023", "firstName": "Rachel", "middleName": "Lauren", "lastName": "Thompson",
+    "dob": "1989-06-26", "ssn": "XXX-XX-8765",
+    "address": { "street": "77 Lakeshore Dr", "city": "Lake Mary", "state": "FL", "zip": "32746" },
+    "plan": "BlueCare PPO", "planId": "P001", "clientId": "C001",
+    "pcp": "Dr. Ramirez", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P001", "effectiveDate": "2023-10-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1024", "firstName": "Kevin", "middleName": "Thomas", "lastName": "Lee",
+    "dob": "1974-10-18", "ssn": "XXX-XX-9876",
+    "address": { "street": "11 Garden Way", "city": "Coral Gables", "state": "FL", "zip": "33134" },
+    "plan": "Aetna Choice POS", "planId": "P020", "clientId": "C005",
+    "pcp": "Dr. Patel", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P020", "effectiveDate": "2022-01-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1025", "firstName": "Rebecca", "middleName": "Grace", "lastName": "Clark",
+    "dob": "1997-01-11", "ssn": "XXX-XX-1098",
+    "address": { "street": "320 College Ave", "city": "Tallahassee", "state": "FL", "zip": "32301" },
+    "plan": "BlueCare HMO", "planId": "P002", "clientId": "C001",
+    "pcp": "Dr. Nguyen", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P002", "effectiveDate": "2024-08-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1026", "firstName": "Steven", "middleName": "Paul", "lastName": "Rodriguez",
+    "dob": "1966-07-14", "ssn": "XXX-XX-2109",
+    "address": { "street": "42 Harbor St", "city": "Key West", "state": "FL", "zip": "33040" },
+    "plan": "Medicaid Managed", "planId": "P030", "clientId": "C006",
+    "pcp": "Dr. Chen", "coverageActive": false,
+    "enrollments": [
+      { "planId": "P030", "effectiveDate": "2020-01-01", "termDate": "2024-06-30", "status": "Termed" }
+    ]
+  },
+  {
+    "memberId": "M1027", "firstName": "Laura", "middleName": "Kate", "lastName": "Lewis",
+    "dob": "1983-11-20", "ssn": "XXX-XX-3210",
+    "address": { "street": "159 Ocean Dr", "city": "Vero Beach", "state": "FL", "zip": "32963" },
+    "plan": "BlueCare PPO", "planId": "P001", "clientId": "C001",
+    "pcp": "Dr. Ramirez", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P001", "effectiveDate": "2023-01-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1028", "firstName": "Thomas", "middleName": "Edward", "lastName": "Walker",
+    "dob": "1957-03-08", "ssn": "XXX-XX-4321",
+    "address": { "street": "68 Country Club Rd", "city": "Ocala", "state": "FL", "zip": "34470" },
+    "plan": "Medicare Advantage", "planId": "P010", "clientId": "C004",
+    "pcp": "Dr. Patel", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P010", "effectiveDate": "2021-01-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1029", "firstName": "Michelle", "middleName": "Dawn", "lastName": "Hall",
+    "dob": "1994-05-29", "ssn": "XXX-XX-5432",
+    "address": { "street": "220 Bayview Dr", "city": "Clearwater", "state": "FL", "zip": "33755" },
+    "plan": "BlueCare HMO", "planId": "P002", "clientId": "C001",
+    "pcp": "Dr. Nguyen", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P002", "effectiveDate": "2024-05-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1030", "firstName": "Paul", "middleName": "William", "lastName": "Allen",
+    "dob": "1962-09-03", "ssn": "XXX-XX-6543",
+    "address": { "street": "55 Pineapple Way", "city": "Stuart", "state": "FL", "zip": "34994" },
+    "plan": "Aetna Choice POS", "planId": "P020", "clientId": "C005",
+    "pcp": "Dr. Chen", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P020", "effectiveDate": "2022-01-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1031", "firstName": "Kimberly", "middleName": "Anne", "lastName": "Young",
+    "dob": "1981-02-21", "ssn": "XXX-XX-7654",
+    "address": { "street": "180 Riverside Dr", "city": "Jacksonville", "state": "FL", "zip": "32207" },
+    "plan": "Anthem BCBS", "planId": "P040", "clientId": "C002",
+    "pcp": "Dr. Ramirez", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P040", "effectiveDate": "2023-01-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  },
+  {
+    "memberId": "M1032", "firstName": "Charles", "middleName": "Henry", "lastName": "King",
+    "dob": "1969-12-12", "ssn": "XXX-XX-8765",
+    "address": { "street": "412 Spanish Trail", "city": "Winter Park", "state": "FL", "zip": "32789" },
+    "plan": "Medicare Advantage", "planId": "P010", "clientId": "C004",
+    "pcp": "Dr. Patel", "coverageActive": true,
+    "enrollments": [
+      { "planId": "P010", "effectiveDate": "2022-01-01", "termDate": "2026-12-31", "status": "Active" }
+    ]
+  }
 ]

@@ -1,0 +1,17 @@
+[
+  { "planId": "P001", "name": "BlueCare PPO",        "clientId": "C001", "productCode": "PPO001", "networkCode": "Blue Network" },
+  { "planId": "P002", "name": "BlueCare HMO",        "clientId": "C001", "productCode": "HMO001", "networkCode": "Blue Network" },
+  { "planId": "P003", "name": "BlueCare EPO",        "clientId": "C001", "productCode": "EPO001", "networkCode": "Blue Network" },
+  { "planId": "P010", "name": "Medicare Advantage",  "clientId": "C004", "productCode": "MAPD001", "networkCode": "Medicare Nat" },
+  { "planId": "P011", "name": "Medicare Supplement", "clientId": "C004", "productCode": "MSUPP001", "networkCode": "Medicare Nat" },
+  { "planId": "P020", "name": "Aetna Choice POS",    "clientId": "C005", "productCode": "POS001", "networkCode": "Aetna Open" },
+  { "planId": "P021", "name": "Aetna HMO",           "clientId": "C005", "productCode": "HMO002", "networkCode": "Aetna Closed" },
+  { "planId": "P030", "name": "Medicaid Managed",    "clientId": "C006", "productCode": "MCD001", "networkCode": "FL Medicaid" },
+  { "planId": "P040", "name": "Anthem BCBS",         "clientId": "C002", "productCode": "PPO002", "networkCode": "Anthem Blue" },
+  { "planId": "P041", "name": "Anthem HMO",          "clientId": "C002", "productCode": "HMO003", "networkCode": "Anthem HMO"  },
+  { "planId": "P050", "name": "Cigna Open Access",   "clientId": "C003", "productCode": "OAP001", "networkCode": "Cigna LocalPlus" },
+  { "planId": "P060", "name": "Humana Gold Plus",    "clientId": "C007", "productCode": "HGP001", "networkCode": "Humana Medicare" },
+  { "planId": "P070", "name": "UHC Choice Plus",     "clientId": "C008", "productCode": "UCP001", "networkCode": "UHC Choice" },
+  { "planId": "P080", "name": "Anthem BCBS GA",      "clientId": "C009", "productCode": "PPO003", "networkCode": "Anthem GA" },
+  { "planId": "P090", "name": "BlueCross TX PPO",    "clientId": "C010", "productCode": "PPO004", "networkCode": "BCBS TX" }
+]

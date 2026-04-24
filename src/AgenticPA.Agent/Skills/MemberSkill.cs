@@ -8,12 +8,19 @@ namespace AgenticPA.Agent.Skills;
 
 public class MemberSkill : SkillBase
 {
-    public MemberSkill(IChatClient chat, McpToolClient mcp, ILogger<MemberSkill> logger)
-        : base(chat, mcp, logger) { }
+    public MemberSkill(IChatClient chat, McpToolClient mcp, ILogger<MemberSkill> logger, SkillRubricLoader? rubricLoader = null)
+        : base(chat, mcp, logger, rubricLoader) { }
 
     public override PaState Handles => PaState.MemberPending;
 
-    protected override string[] AllowedTools => new[] { "search_members", "get_member_context" };
+    protected override string? RubricFileName => "member-search-rubric.md";
+
+    protected override string[] AllowedTools => new[]
+    {
+        "search_members", "get_member_context",
+        "search_client_specific_members", "get_member_enrollments",
+        "search_anthem_bc_enrollments", "get_clients"
+    };
 
     protected override string SystemPrompt => """
     You are the Member Intake skill in a prior-authorization workflow.

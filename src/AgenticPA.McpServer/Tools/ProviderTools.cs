@@ -22,4 +22,19 @@ public static class ProviderTools
         IProviderService providers,
         [Description("Provider NPI")] string npi)
         => await providers.GetNetworkStatusAsync(npi);
+
+    [McpServerTool(Name = "get_provider_credentials")]
+    [Description("Return license, board certifications, and sanctions for a provider by NPI.")]
+    public static async Task<ProviderCredentials?> GetProviderCredentials(
+        IProviderService providers,
+        [Description("Provider NPI")] string npi)
+        => await providers.GetCredentialsAsync(npi);
+
+    [McpServerTool(Name = "verify_provider_network")]
+    [Description("Verify whether a provider is in-network for a specific plan and return effective dates.")]
+    public static async Task<ProviderNetworkStatus> VerifyProviderNetwork(
+        IProviderService providers,
+        [Description("Provider NPI")] string npi,
+        [Description("Plan id, e.g. P001")] string planId)
+        => await providers.VerifyNetworkAsync(npi, planId);
 }

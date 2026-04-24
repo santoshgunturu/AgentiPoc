@@ -13,6 +13,9 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IProviderService, ProviderService>();
         services.AddSingleton<IFacilityService, FacilityService>();
         services.AddSingleton<IDiagnosisService, DiagnosisService>();
+        services.AddSingleton<IClientService, ClientService>();
+        services.AddSingleton<IPolicyService, PolicyService>();
+        services.AddSingleton<IAuditService, AuditService>();
         services.AddSingleton<IRulesEngine, RulesEngine>();
         return services;
     }

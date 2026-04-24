@@ -23,6 +23,7 @@ public static class ServiceCollectionExtensions
             return new McpToolClient(mcpEndpointFactory(sp), lf);
         });
         services.AddSingleton<IRulesEngineClient>(sp => sp.GetRequiredService<McpToolClient>());
+        services.AddSingleton<Skills.SkillRubricLoader>();
 
         services.AddScoped<PaWorkflowEngine>();
         services.AddScoped<ISkill, MemberSkill>();

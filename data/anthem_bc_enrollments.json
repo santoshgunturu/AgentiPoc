@@ -1,0 +1,7 @@
+[
+  { "memberId": "M1022", "clientId": "C002", "contractNumber": "ABC-2022-00145",  "effectiveDate": "2022-01-01", "termDate": "2026-12-31", "status": "Active" },
+  { "memberId": "M1031", "clientId": "C002", "contractNumber": "ABC-2023-02871",  "effectiveDate": "2023-01-01", "termDate": "2026-12-31", "status": "Active" },
+  { "memberId": "M1101", "clientId": "C002", "contractNumber": "ABC-2024-08421",  "effectiveDate": "2024-06-01", "termDate": "2026-12-31", "status": "Active" },
+  { "memberId": "M1102", "clientId": "C002", "contractNumber": "ABC-2023-05533",  "effectiveDate": "2023-03-01", "termDate": "2024-02-28", "status": "Termed" },
+  { "memberId": "M1103", "clientId": "C009", "contractNumber": "ABC-GA-2024-119", "effectiveDate": "2024-01-01", "termDate": "2026-12-31", "status": "Active" }
+]

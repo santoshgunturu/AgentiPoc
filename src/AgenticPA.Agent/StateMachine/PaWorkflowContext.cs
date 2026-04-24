@@ -16,7 +16,13 @@ public record PaWorkflowContext(
     RulesEvaluation? PreflightResult,
     RulesEvaluation? SubmitResult,
     PaUrgency Urgency = PaUrgency.Standard,
-    DateTime? StartedAt = null)
+    DateTime? StartedAt = null,
+    VerificationState? MemberVerification = null,
+    VerificationState? ProcedureVerification = null,
+    VerificationState? ProviderVerification = null,
+    VerificationState? FacilityVerification = null,
+    VerificationState? ClinicalVerification = null,
+    string? AuditCaseId = null)
 {
     public static PaWorkflowContext Initial()
         => new(PaState.MemberPending, null, null, null, null, null, null, null, null, null, PaUrgency.Standard, DateTime.UtcNow);

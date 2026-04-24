@@ -42,7 +42,7 @@ public class Phase5SkillTests
         {"action":"none"}
         ```
         """);
-        MemberSkill skill = new(chat, NewMcpClientStub(), NullLogger<MemberSkill>.Instance);
+        MemberSkill skill = new(chat, NewMcpClientStub(), NullLogger<MemberSkill>.Instance, new SkillRubricLoader());
         PaWorkflowContext ctx = PaWorkflowContext.Initial();
 
         SkillResponse resp = await skill.HandleTurnAsync(ctx, Array.Empty<ChatTurn>(), "Jane Smith", CancellationToken.None);
@@ -61,7 +61,7 @@ public class Phase5SkillTests
         {"action":"set_member","memberId":"M1001"}
         ```
         """);
-        MemberSkill skill = new(chat, NewMcpClientStub(), NullLogger<MemberSkill>.Instance);
+        MemberSkill skill = new(chat, NewMcpClientStub(), NullLogger<MemberSkill>.Instance, new SkillRubricLoader());
         PaWorkflowContext ctx = PaWorkflowContext.Initial();
 
         SkillResponse resp = await skill.HandleTurnAsync(ctx, Array.Empty<ChatTurn>(), "1978-04-12", CancellationToken.None);

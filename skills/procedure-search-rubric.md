@@ -11,6 +11,8 @@ tags: [procedure-search, conversational-agent, healthcare]
 
 {{include:_shared/verification-rules.md}}
 
+{{include:_shared/conversation-rules.md}}
+
 ---
 
 ## Grid 1 · Search parameters
@@ -92,3 +94,23 @@ block — they are disclosed.
 | CPT retired | Suggest replacement if available | "That CPT was retired on [date]. The current code is [X]." |
 | Plan mismatch | Flag and continue | "That CPT is not covered under [plan]. Alternatives: [list]." |
 | Tool timeout | Retry once then fallback | "Experiencing a delay. Trying again…" |
+
+---
+
+## Grid 7 · Command emission
+
+**After explicit operator confirmation of a resolved CPT (even no-auth CPTs):**
+
+```json
+{"action":"set_procedure","cpt":"<cpt>"}
+```
+
+**In every other case (asking contrast, disambiguating, operator declined):**
+
+```json
+{"action":"none"}
+```
+
+Read `<cpt>` from the "Proposed procedure:" bullet list in the previous
+assistant turn. CRITICAL: without `set_procedure` the workflow will not
+advance from the Procedure step.

@@ -24,25 +24,29 @@ public abstract class SkillBase : ISkill
     public abstract PaState Handles { get; }
 
     /// <summary>
-    /// Optional rubric file (in skills/*.md). If set and the file loads, the rubric
-    /// replaces the hardcoded SystemPrompt. Falls back to SystemPrompt otherwise.
+    /// Rubric file in skills/*.md. MUST be set on every concrete skill. The rendered
+    /// rubric (with {{include:}} directives resolved) IS the system prompt.
     /// </summary>
-    protected virtual string? RubricFileName => null;
+    protected abstract string RubricFileName { get; }
 
-    protected abstract string SystemPrompt { get; }
     protected abstract string[] AllowedTools { get; }
 
     protected string ResolveSystemPrompt()
     {
-        if (RubricFileName is not null && RubricLoader is not null)
+        if (RubricLoader is null)
         {
-            string rubric = RubricLoader.Load(RubricFileName);
-            if (!string.IsNullOrWhiteSpace(rubric) && rubric.Length > 200)
-            {
-                return rubric + "\n\n---\n\n" + SystemPrompt;
-            }
+            throw new InvalidOperationException(
+                $"SkillRubricLoader was not injected into {GetType().Name}. " +
+                "All skills are now rubric-driven — the loader is mandatory.");
         }
-        return SystemPrompt;
+        string rubric = RubricLoader.Load(RubricFileName);
+        if (string.IsNullOrWhiteSpace(rubric) || rubric.Length < 200)
+        {
+            throw new InvalidOperationException(
+                $"Rubric '{RubricFileName}' for {GetType().Name} is missing or too small " +
+                $"({rubric?.Length ?? 0} chars). Check skills/ is copied to output.");
+        }
+        return rubric;
     }
 
     public async Task<SkillResponse> HandleTurnAsync(

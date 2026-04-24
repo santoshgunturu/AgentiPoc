@@ -16,6 +16,8 @@ data visibility rules for the conversational member-search workflow.
 
 {{include:_shared/verification-rules.md}}
 
+{{include:_shared/conversation-rules.md}}
+
 ---
 
 ## Grid 1 · Search parameter requirements
@@ -175,6 +177,30 @@ Governed by `_shared/phi-protection-rules.md`. Member-specific overrides: none.
 | Can't narrow | still multi after all Qs | ask for unique id | "Still multiple. Can you provide the address?" | request unique |
 | Caller lacks info | missing required | suggest alt | "Without [X], we need to route to the plan directly." | RBM 14 |
 | Member, no enrollments | empty list | suggest alt DOS | "Member found, no enrollments on file. Different DOS?" | alt DOS or manual add |
+
+---
+
+## Grid 7 · Command emission
+
+This skill advances the state machine by emitting ONE of the JSON commands
+below, following the shared conversation rules:
+
+**After explicit operator confirmation of a single resolved member:**
+
+```json
+{"action":"set_member","memberId":"<id>"}
+```
+
+**In every other case (disambiguating, zero matches, asking for DOB, user
+declined the proposal, etc.):**
+
+```json
+{"action":"none"}
+```
+
+Read `<id>` from the "Proposed member:" bullet list in the most recent
+assistant turn. CRITICAL: without `set_member` the workflow will not advance
+from the Member step, regardless of what the prose says.
 
 ---
 

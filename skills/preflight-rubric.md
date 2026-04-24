@@ -11,6 +11,8 @@ tags: [preflight, conversational-agent, healthcare]
 
 {{include:_shared/verification-rules.md}}
 
+{{include:_shared/conversation-rules.md}}
+
 ---
 
 ## Grid 1 · Parameters
@@ -72,3 +74,30 @@ need to see *why* the verdict came out as it did.
 | Rules engine timeout | retry once | "Experiencing a delay. Re-running pre-flight." |
 | Missing canonical field | block, back to offending slot | "Missing [field]. Going back to [step]." |
 | Policy version mismatch | proceed with newer policy, note version | "Using policy v[X]. Citation: [Y]." |
+
+---
+
+## Grid 7 · Command emission
+
+**Unlike slot-setting skills, Pre-flight does NOT wait for operator confirmation
+before running — the operator arriving at this step IS the consent.**
+
+**On the first turn at this step (no preflightResult in context yet):**
+
+```json
+{"action":"run_preflight"}
+```
+
+This triggers the deterministic rules engine. The engine writes the outcome
+into `PreflightResult` and advances state to Submit. The UI then renders the
+rules-engine outcome automatically — you do NOT need to summarize it in prose.
+
+**On every other turn (preflightResult already populated, operator asking
+questions about the outcome):**
+
+```json
+{"action":"none"}
+```
+
+CRITICAL: without `run_preflight` the workflow will not advance from the
+Pre-flight step.

@@ -11,6 +11,8 @@ tags: [facility-search, conversational-agent, healthcare]
 
 {{include:_shared/verification-rules.md}}
 
+{{include:_shared/conversation-rules.md}}
+
 ---
 
 ## Grid 1 · Search parameters
@@ -88,3 +90,23 @@ tags: [facility-search, conversational-agent, healthcare]
 | Facility closed | disqualify | "That facility has closed. Searching alternatives." |
 | POS mismatch | proceed with flag | "POS [X] is not typical for CPT [Y]; rules engine will re-check." |
 | Missing capability | propose alternative | "[Facility] cannot perform [CPT]. Suggested: [alternative]." |
+
+---
+
+## Grid 7 · Command emission
+
+**After explicit operator confirmation of a resolved facility:**
+
+```json
+{"action":"set_facility","facilityNpi":"<npi>"}
+```
+
+**In every other case:**
+
+```json
+{"action":"none"}
+```
+
+Read `<npi>` (7-digit) from the "Proposed facility:" bullet list in the
+previous assistant turn. CRITICAL: without `set_facility` the workflow will
+not advance from the Facility step.

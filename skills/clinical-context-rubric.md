@@ -11,6 +11,8 @@ tags: [clinical-context, conversational-agent, healthcare]
 
 {{include:_shared/verification-rules.md}}
 
+{{include:_shared/conversation-rules.md}}
+
 ---
 
 ## Grid 1 · Search parameters
@@ -90,3 +92,25 @@ Clinical notes are always audit-logged even if not shown in full to the operator
 | Invalid ICD format | ask again | "ICD-10 format: letter + digits + optional dot." |
 | ICD-CPT mismatch | flag, suggest | "That diagnosis doesn't typically support [CPT]. Alternatives: [related codes]." |
 | Insufficient PT | flag, continue | "Policy requires [N] weeks; you provided [M]. Rules engine will re-check." |
+
+---
+
+## Grid 7 · Command emission
+
+**After explicit operator confirmation of all three fields (ICD-10, PT weeks,
+notes):**
+
+```json
+{"action":"set_clinical","icd10":"<code>","weeksPt":<int>,"notes":"<text>"}
+```
+
+**In every other case (still collecting, operator declined / updating):**
+
+```json
+{"action":"none"}
+```
+
+Read the three values from the "Proposed clinical context:" bullet list in the
+previous assistant turn. `weeksPt` must be a JSON integer (not a string).
+CRITICAL: without `set_clinical` the workflow will not advance from the
+Clinical step.

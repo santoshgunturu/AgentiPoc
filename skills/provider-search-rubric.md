@@ -11,6 +11,8 @@ tags: [provider-search, conversational-agent, healthcare]
 
 {{include:_shared/verification-rules.md}}
 
+{{include:_shared/conversation-rules.md}}
+
 ---
 
 ## Grid 1 · Search parameters
@@ -92,3 +94,23 @@ tags: [provider-search, conversational-agent, healthcare]
 | License lapsed | disqualify | "That provider's license has expired. Searching alternatives." |
 | CMS preclusion (sanction) | disqualify | "That provider is precluded. Searching alternatives." |
 | All methods exhausted | route to manual | "Couldn't locate a qualified provider. Please contact [X]." |
+
+---
+
+## Grid 7 · Command emission
+
+**After explicit operator confirmation of a resolved provider:**
+
+```json
+{"action":"set_requesting_provider","npi":"<npi>"}
+```
+
+**In every other case:**
+
+```json
+{"action":"none"}
+```
+
+Read `<npi>` (10-digit) from the "Proposed requesting provider:" bullet list
+in the previous assistant turn. CRITICAL: without `set_requesting_provider`
+the workflow will not advance from the Requesting Provider step.

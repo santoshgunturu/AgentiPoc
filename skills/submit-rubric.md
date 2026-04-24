@@ -11,6 +11,8 @@ tags: [submit, conversational-agent, healthcare]
 
 {{include:_shared/verification-rules.md}}
 
+{{include:_shared/conversation-rules.md}}
+
 ---
 
 ## Grid 1 · Parameters
@@ -64,3 +66,24 @@ to trigger the deterministic engine. The agent must not submit on implicit signa
 | Audit write failure | retry, then escalate | "Audit write failed — do not close; escalating." |
 | Duplicate submission | block | "A case for this request is already open: [ID]." |
 | Payer ack timeout | proceed, mark pending | "Submission accepted; payer acknowledgement pending." |
+
+---
+
+## Grid 7 · Command emission
+
+**After explicit operator confirmation ("yes", "submit", "confirm", "go ahead"):**
+
+```json
+{"action":"submit"}
+```
+
+This triggers the deterministic rules engine to record the final verdict and
+the audit log to write the case. The UI then renders the outcome automatically.
+
+**If the operator declines ("no", "cancel") or asks a question:**
+
+```json
+{"action":"none"}
+```
+
+CRITICAL: without `submit` the workflow will not advance from the Submit step.

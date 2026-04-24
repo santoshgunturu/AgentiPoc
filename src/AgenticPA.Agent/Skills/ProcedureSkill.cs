@@ -8,8 +8,8 @@ namespace AgenticPA.Agent.Skills;
 
 public class ProcedureSkill : SkillBase
 {
-    public ProcedureSkill(IChatClient chat, McpToolClient mcp, ILogger<ProcedureSkill> logger, SkillRubricLoader rubricLoader)
-        : base(chat, mcp, logger, rubricLoader) { }
+    public ProcedureSkill(IChatClient chat, McpToolClient mcp, ILogger<ProcedureSkill> logger, SkillRubricLoader rubricLoader, InFlightCounter? inFlight = null)
+        : base(chat, mcp, logger, rubricLoader, inFlight) { }
 
     public override PaState Handles => PaState.ProcedurePending;
 

@@ -30,6 +30,8 @@ builder.Services.AddAgenticPaAgent(
     },
     mcpEndpointFactory: _ => new Uri(mcpUrl));
 
+builder.Services.AddRubricNightlyRefresh(builder.Configuration);
+
 WebApplication app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

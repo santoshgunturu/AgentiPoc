@@ -8,8 +8,8 @@ namespace AgenticPA.Agent.Skills;
 
 public class FacilitySkill : SkillBase
 {
-    public FacilitySkill(IChatClient chat, McpToolClient mcp, ILogger<FacilitySkill> logger, SkillRubricLoader rubricLoader)
-        : base(chat, mcp, logger, rubricLoader) { }
+    public FacilitySkill(IChatClient chat, McpToolClient mcp, ILogger<FacilitySkill> logger, SkillRubricLoader rubricLoader, InFlightCounter? inFlight = null)
+        : base(chat, mcp, logger, rubricLoader, inFlight) { }
 
     public override PaState Handles => PaState.FacilityPending;
 

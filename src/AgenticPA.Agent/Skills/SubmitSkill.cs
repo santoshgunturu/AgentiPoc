@@ -8,8 +8,8 @@ namespace AgenticPA.Agent.Skills;
 
 public class SubmitSkill : SkillBase
 {
-    public SubmitSkill(IChatClient chat, McpToolClient mcp, ILogger<SubmitSkill> logger, SkillRubricLoader rubricLoader)
-        : base(chat, mcp, logger, rubricLoader) { }
+    public SubmitSkill(IChatClient chat, McpToolClient mcp, ILogger<SubmitSkill> logger, SkillRubricLoader rubricLoader, InFlightCounter? inFlight = null)
+        : base(chat, mcp, logger, rubricLoader, inFlight) { }
 
     public override PaState Handles => PaState.Submit;
 

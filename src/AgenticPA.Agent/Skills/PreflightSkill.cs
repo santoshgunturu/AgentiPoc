@@ -8,8 +8,8 @@ namespace AgenticPA.Agent.Skills;
 
 public class PreflightSkill : SkillBase
 {
-    public PreflightSkill(IChatClient chat, McpToolClient mcp, ILogger<PreflightSkill> logger, SkillRubricLoader rubricLoader)
-        : base(chat, mcp, logger, rubricLoader) { }
+    public PreflightSkill(IChatClient chat, McpToolClient mcp, ILogger<PreflightSkill> logger, SkillRubricLoader rubricLoader, InFlightCounter? inFlight = null)
+        : base(chat, mcp, logger, rubricLoader, inFlight) { }
 
     public override PaState Handles => PaState.Preflight;
 

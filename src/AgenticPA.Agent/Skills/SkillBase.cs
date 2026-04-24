@@ -12,13 +12,16 @@ public abstract class SkillBase : ISkill
     protected readonly McpToolClient Mcp;
     protected readonly ILogger Logger;
     protected readonly SkillRubricLoader? RubricLoader;
+    protected readonly InFlightCounter? InFlight;
 
-    protected SkillBase(IChatClient chatClient, McpToolClient mcp, ILogger logger, SkillRubricLoader? rubricLoader = null)
+    protected SkillBase(IChatClient chatClient, McpToolClient mcp, ILogger logger,
+        SkillRubricLoader? rubricLoader = null, InFlightCounter? inFlight = null)
     {
         ChatClient = chatClient;
         Mcp = mcp;
         Logger = logger;
         RubricLoader = rubricLoader;
+        InFlight = inFlight;
     }
 
     public abstract PaState Handles { get; }
@@ -77,6 +80,7 @@ public abstract class SkillBase : ISkill
                 : Mcp.ToolsNamed(AllowedTools).Cast<AITool>().ToList()
         };
 
+        using IDisposable? lease = InFlight?.BeginTurn();
         ChatResponse response = await ChatClient.GetResponseAsync(messages, options, cancellationToken: ct);
         string fullText = response.Text ?? string.Empty;
 

@@ -8,8 +8,8 @@ namespace AgenticPA.Agent.Skills;
 
 public class MemberSkill : SkillBase
 {
-    public MemberSkill(IChatClient chat, McpToolClient mcp, ILogger<MemberSkill> logger, SkillRubricLoader rubricLoader)
-        : base(chat, mcp, logger, rubricLoader) { }
+    public MemberSkill(IChatClient chat, McpToolClient mcp, ILogger<MemberSkill> logger, SkillRubricLoader rubricLoader, InFlightCounter? inFlight = null)
+        : base(chat, mcp, logger, rubricLoader, inFlight) { }
 
     public override PaState Handles => PaState.MemberPending;
 

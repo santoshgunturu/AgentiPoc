@@ -8,8 +8,8 @@ namespace AgenticPA.Agent.Skills;
 
 public class RequestingProviderSkill : SkillBase
 {
-    public RequestingProviderSkill(IChatClient chat, McpToolClient mcp, ILogger<RequestingProviderSkill> logger, SkillRubricLoader rubricLoader)
-        : base(chat, mcp, logger, rubricLoader) { }
+    public RequestingProviderSkill(IChatClient chat, McpToolClient mcp, ILogger<RequestingProviderSkill> logger, SkillRubricLoader rubricLoader, InFlightCounter? inFlight = null)
+        : base(chat, mcp, logger, rubricLoader, inFlight) { }
 
     public override PaState Handles => PaState.ReqProviderPending;
 

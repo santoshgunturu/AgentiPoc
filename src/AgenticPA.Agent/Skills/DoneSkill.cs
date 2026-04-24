@@ -8,8 +8,8 @@ namespace AgenticPA.Agent.Skills;
 
 public class DoneSkill : SkillBase
 {
-    public DoneSkill(IChatClient chat, McpToolClient mcp, ILogger<DoneSkill> logger, SkillRubricLoader rubricLoader)
-        : base(chat, mcp, logger, rubricLoader) { }
+    public DoneSkill(IChatClient chat, McpToolClient mcp, ILogger<DoneSkill> logger, SkillRubricLoader rubricLoader, InFlightCounter? inFlight = null)
+        : base(chat, mcp, logger, rubricLoader, inFlight) { }
 
     public override PaState Handles => PaState.Done;
 

@@ -1,16 +1,28 @@
+using System.Collections.Concurrent;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Options;
 
 namespace AgenticPA.Agent.Skills;
 
 public class SkillRubricLoader
 {
     private readonly string _rubricRoot;
-    private readonly Dictionary<string, string> _cache = new();
+    private readonly IOptionsMonitor<RubricRefreshOptions>? _options;
+
+    // _cache is swapped atomically via Interlocked.Exchange during a refresh so that
+    // in-flight reads always see a fully-rendered snapshot.
+    private ConcurrentDictionary<string, string> _cache = new(StringComparer.OrdinalIgnoreCase);
 
     public SkillRubricLoader()
     {
         _rubricRoot = ResolveRubricRoot();
+    }
+
+    public SkillRubricLoader(IOptionsMonitor<RubricRefreshOptions> options)
+    {
+        _rubricRoot = ResolveRubricRoot();
+        _options = options;
     }
 
     public SkillRubricLoader(string rubricRoot)
@@ -18,12 +30,47 @@ public class SkillRubricLoader
         _rubricRoot = rubricRoot;
     }
 
+    public string RubricRoot => _rubricRoot;
+
+    /// <summary>Last time the cache was rebuilt. Updated on every successful RefreshCache().</summary>
+    public DateTime LastRefreshedUtc { get; private set; } = DateTime.UtcNow;
+
     public string Load(string rubricFileName)
     {
-        if (_cache.TryGetValue(rubricFileName, out string? cached)) return cached;
+        // Dev-mode: always re-read from disk, no cache.
+        if (_options?.CurrentValue.AlwaysReloadFromDisk == true)
+        {
+            return ReadWithIncludes(rubricFileName, new HashSet<string>(StringComparer.OrdinalIgnoreCase));
+        }
+
+        // Snapshot the reference so a concurrent refresh can't break this read.
+        ConcurrentDictionary<string, string> snapshot = _cache;
+        if (snapshot.TryGetValue(rubricFileName, out string? cached)) return cached;
+
         string rendered = ReadWithIncludes(rubricFileName, new HashSet<string>(StringComparer.OrdinalIgnoreCase));
-        _cache[rubricFileName] = rendered;
+        snapshot[rubricFileName] = rendered;
         return rendered;
+    }
+
+    /// <summary>
+    /// Rebuild the cache in full: re-read every previously-loaded rubric from disk and swap
+    /// the cache reference atomically. Safe to call concurrently with Load().
+    /// Returns the number of rubric files that were re-read.
+    /// </summary>
+    public int RefreshCache()
+    {
+        ConcurrentDictionary<string, string> previous = _cache;
+        ConcurrentDictionary<string, string> next = new(StringComparer.OrdinalIgnoreCase);
+
+        foreach (string fileName in previous.Keys)
+        {
+            string rendered = ReadWithIncludes(fileName, new HashSet<string>(StringComparer.OrdinalIgnoreCase));
+            next[fileName] = rendered;
+        }
+
+        Interlocked.Exchange(ref _cache, next);
+        LastRefreshedUtc = DateTime.UtcNow;
+        return next.Count;
     }
 
     private string ReadWithIncludes(string relativePath, HashSet<string> visited)
@@ -50,7 +97,6 @@ public class SkillRubricLoader
             string candidate = Path.Combine(dir, "skills");
             if (Directory.Exists(candidate)) return candidate;
         }
-        // Fall back to CWD/skills
         string cwd = Path.Combine(Directory.GetCurrentDirectory(), "skills");
         return Directory.Exists(cwd) ? cwd : string.Empty;
     }

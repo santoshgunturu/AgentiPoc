@@ -8,8 +8,8 @@ namespace AgenticPA.Agent.Skills;
 
 public class ClinicalSkill : SkillBase
 {
-    public ClinicalSkill(IChatClient chat, McpToolClient mcp, ILogger<ClinicalSkill> logger, SkillRubricLoader rubricLoader)
-        : base(chat, mcp, logger, rubricLoader) { }
+    public ClinicalSkill(IChatClient chat, McpToolClient mcp, ILogger<ClinicalSkill> logger, SkillRubricLoader rubricLoader, InFlightCounter? inFlight = null)
+        : base(chat, mcp, logger, rubricLoader, inFlight) { }
 
     public override PaState Handles => PaState.ClinicalPending;
 

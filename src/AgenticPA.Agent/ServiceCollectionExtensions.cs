@@ -2,8 +2,11 @@ using AgenticPA.Agent.Mcp;
 using AgenticPA.Agent.Skills;
 using AgenticPA.Agent.StateMachine;
 using Microsoft.Extensions.AI;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using OpenAI;
 
 namespace AgenticPA.Agent;
@@ -23,7 +26,12 @@ public static class ServiceCollectionExtensions
             return new McpToolClient(mcpEndpointFactory(sp), lf);
         });
         services.AddSingleton<IRulesEngineClient>(sp => sp.GetRequiredService<McpToolClient>());
-        services.AddSingleton<Skills.SkillRubricLoader>();
+        services.AddSingleton(sp =>
+        {
+            IOptionsMonitor<Skills.RubricRefreshOptions>? opts = sp.GetService<IOptionsMonitor<Skills.RubricRefreshOptions>>();
+            return opts is null ? new Skills.SkillRubricLoader() : new Skills.SkillRubricLoader(opts);
+        });
+        services.AddSingleton<Skills.InFlightCounter>();
 
         services.AddScoped<PaWorkflowEngine>();
         services.AddScoped<ISkill, MemberSkill>();
@@ -35,6 +43,15 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ISkill, SubmitSkill>();
         services.AddScoped<ISkill, DoneSkill>();
         services.AddScoped<Orchestrator>();
+        return services;
+    }
+
+    public static IServiceCollection AddRubricNightlyRefresh(
+        this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        services.Configure<Skills.RubricRefreshOptions>(configuration.GetSection(Skills.RubricRefreshOptions.SectionName));
+        services.AddHostedService<Skills.RubricRefreshService>();
         return services;
     }
 

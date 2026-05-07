@@ -1,4 +1,5 @@
 using AgenticPA.Agent;
+using AgenticPA.Agent.Demo;
 using AgenticPA.Web.Components;
 using AgenticPA.Web.Services;
 using Microsoft.Extensions.AI;
@@ -8,6 +9,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+string provider = builder.Configuration["Agent:Provider"] ?? "OpenAI";
 string endpoint = builder.Configuration["Agent:Endpoint"] ?? "https://api.openai.com/v1";
 string model = builder.Configuration["Agent:Model"] ?? "gpt-4o-mini";
 string apiKey = builder.Configuration["Agent:ApiKey"]
@@ -20,7 +22,9 @@ builder.Services.AddScoped<ChatSessionState>();
 builder.Services.AddAgenticPaAgent(
     chatClientFactory: sp =>
     {
-        IChatClient baseClient = ServiceCollectionExtensions.BuildOpenAiChatClient(endpoint, model, apiKey);
+        IChatClient baseClient = provider.Equals("Demo", StringComparison.OrdinalIgnoreCase)
+            ? new ScriptedChatClient()
+            : ServiceCollectionExtensions.BuildOpenAiChatClient(endpoint, model, apiKey);
         ChatSessionState session = sp.GetRequiredService<ChatSessionState>();
         IChatClient withTools = new ChatClientBuilder(baseClient)
             .UseFunctionInvocation()

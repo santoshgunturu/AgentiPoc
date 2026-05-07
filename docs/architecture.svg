@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 980" font-family="-apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#16a34a"/>
+    </marker>
+    <linearGradient id="demo-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#dcfce7"/>
+      <stop offset="100%" stop-color="#bbf7d0"/>
+    </linearGradient>
+    <linearGradient id="openai-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#dbeafe"/>
+      <stop offset="100%" stop-color="#bfdbfe"/>
+    </linearGradient>
+    <linearGradient id="ui-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fafafa"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </linearGradient>
+    <filter id="soft-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <rect width="1280" height="980" fill="#f8fafc"/>
+
+  <!-- Title -->
+  <text x="640" y="38" text-anchor="middle" font-size="22" font-weight="700" fill="#0f172a">CMBM Agentic PA Intake — Architecture</text>
+  <text x="640" y="62" text-anchor="middle" font-size="14" fill="#475569">Demo (no-LLM) vs OpenAI mode — same code path, one config flag</text>
+
+  <!-- =================== UI Layer =================== -->
+  <g filter="url(#soft-shadow)">
+    <rect x="40" y="90" width="1200" height="120" rx="10" fill="url(#ui-grad)" stroke="#cbd5e1"/>
+  </g>
+  <text x="60" y="115" font-size="13" font-weight="700" fill="#0f172a">AgenticPA.Web (Blazor Server)</text>
+
+  <rect x="60" y="130" width="320" height="65" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="220" y="150" text-anchor="middle" font-size="13" font-weight="600" fill="#0f172a">State sidebar</text>
+  <text x="220" y="170" text-anchor="middle" font-size="11" fill="#475569">Member ✓ · Procedure ● · Provider ○</text>
+  <text x="220" y="186" text-anchor="middle" font-size="11" fill="#475569">Facility ○ · Clinical ○ · Preflight ○ · Submit ○</text>
+
+  <rect x="400" y="130" width="440" height="65" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="620" y="150" text-anchor="middle" font-size="13" font-weight="600" fill="#0f172a">Chat transcript</text>
+  <text x="620" y="170" text-anchor="middle" font-size="11" fill="#475569">user: "PA for Jane Smith, DOB 1978-04-12"</text>
+  <text x="620" y="186" text-anchor="middle" font-size="11" fill="#475569">agent: "Got it — Jane Smith M1001..."</text>
+
+  <rect x="860" y="130" width="360" height="65" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="1040" y="150" text-anchor="middle" font-size="13" font-weight="600" fill="#0f172a">Under-the-hood log</text>
+  <text x="1040" y="170" text-anchor="middle" font-size="11" fill="#475569">tool-call: search_members({"query":"Jane Smith"})</text>
+  <text x="1040" y="186" text-anchor="middle" font-size="11" fill="#475569">tool-result: [{memberId:"M1001",...}]</text>
+
+  <!-- arrow UI -> Orchestrator -->
+  <line x1="640" y1="210" x2="640" y2="240" stroke="#334155" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- =================== Orchestrator =================== -->
+  <g filter="url(#soft-shadow)">
+    <rect x="500" y="240" width="280" height="60" rx="8" fill="#ffffff" stroke="#94a3b8"/>
+  </g>
+  <text x="640" y="265" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">Orchestrator + PaWorkflowEngine</text>
+  <text x="640" y="285" text-anchor="middle" font-size="11" fill="#475569">deterministic 7-state machine</text>
+
+  <line x1="640" y1="300" x2="640" y2="328" stroke="#334155" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- =================== Skill =================== -->
+  <g filter="url(#soft-shadow)">
+    <rect x="430" y="328" width="420" height="78" rx="8" fill="#ffffff" stroke="#94a3b8"/>
+  </g>
+  <text x="640" y="352" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">Active Skill (1 of 8)</text>
+  <text x="640" y="372" text-anchor="middle" font-size="11" fill="#475569">MemberSkill · ProcedureSkill · ProviderSkill · FacilitySkill</text>
+  <text x="640" y="388" text-anchor="middle" font-size="11" fill="#475569">ClinicalSkill · PreflightSkill · SubmitSkill · DoneSkill</text>
+  <text x="640" y="402" text-anchor="middle" font-size="10" fill="#64748b" font-style="italic">system prompt = rubric .md  ·  AllowedTools[] whitelist</text>
+
+  <line x1="640" y1="406" x2="640" y2="438" stroke="#334155" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <text x="660" y="426" font-size="10" fill="#475569" font-style="italic">IChatClient.GetResponseAsync(messages, tools)</text>
+
+  <!-- =================== ChatClientBuilder pipeline =================== -->
+  <g filter="url(#soft-shadow)">
+    <rect x="240" y="438" width="800" height="80" rx="8" fill="#fef9c3" stroke="#eab308"/>
+  </g>
+  <text x="640" y="462" text-anchor="middle" font-size="13" font-weight="700" fill="#713f12">ChatClientBuilder pipeline (Microsoft.Extensions.AI)</text>
+
+  <rect x="270" y="476" width="220" height="34" rx="5" fill="#ffffff" stroke="#eab308"/>
+  <text x="380" y="498" text-anchor="middle" font-size="12" font-weight="600" fill="#713f12">LoggingIChatClient</text>
+
+  <line x1="490" y1="493" x2="528" y2="493" stroke="#713f12" stroke-width="1.4" marker-end="url(#arrow)"/>
+
+  <rect x="528" y="476" width="220" height="34" rx="5" fill="#ffffff" stroke="#eab308"/>
+  <text x="638" y="498" text-anchor="middle" font-size="12" font-weight="600" fill="#713f12">UseFunctionInvocation</text>
+
+  <line x1="748" y1="493" x2="786" y2="493" stroke="#713f12" stroke-width="1.4" marker-end="url(#arrow)"/>
+
+  <rect x="786" y="476" width="220" height="34" rx="5" fill="#ffffff" stroke="#eab308" stroke-dasharray="4 3"/>
+  <text x="896" y="498" text-anchor="middle" font-size="12" font-weight="600" fill="#713f12">IChatClient (swap point)</text>
+
+  <!-- =================== Swap point split =================== -->
+  <line x1="640" y1="518" x2="640" y2="540" stroke="#334155" stroke-width="1.6"/>
+  <line x1="280" y1="540" x2="1000" y2="540" stroke="#334155" stroke-width="1.6"/>
+  <line x1="280" y1="540" x2="280" y2="568" stroke="#16a34a" stroke-width="2" marker-end="url(#arrow-green)"/>
+  <line x1="1000" y1="540" x2="1000" y2="568" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+  <!-- Config flag callout -->
+  <g>
+    <rect x="540" y="525" width="200" height="22" rx="11" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+    <text x="640" y="541" text-anchor="middle" font-size="11" font-weight="600" fill="#0f172a">Agent:Provider</text>
+  </g>
+
+  <!-- =================== DEMO branch =================== -->
+  <g filter="url(#soft-shadow)">
+    <rect x="60" y="568" width="540" height="170" rx="10" fill="url(#demo-grad)" stroke="#16a34a" stroke-width="1.5"/>
+  </g>
+  <text x="80" y="592" font-size="14" font-weight="700" fill="#14532d">DEMO MODE — "Provider": "Demo"</text>
+  <text x="80" y="612" font-size="11" fill="#166534">No outbound network · No API key · Office-machine-safe</text>
+
+  <rect x="80" y="624" width="500" height="100" rx="8" fill="#ffffff" stroke="#16a34a"/>
+  <text x="330" y="645" text-anchor="middle" font-size="13" font-weight="700" fill="#14532d">ScriptedChatClient : IChatClient</text>
+  <text x="330" y="664" text-anchor="middle" font-size="11" fill="#166534">in-process, deterministic</text>
+
+  <rect x="100" y="676" width="220" height="38" rx="5" fill="#dcfce7" stroke="#16a34a" stroke-dasharray="3 2"/>
+  <text x="210" y="691" text-anchor="middle" font-size="11" font-weight="600" fill="#14532d">DemoScript</text>
+  <text x="210" y="706" text-anchor="middle" font-size="10" fill="#166534">canned text + JSON command</text>
+
+  <rect x="340" y="676" width="220" height="38" rx="5" fill="#dcfce7" stroke="#16a34a" stroke-dasharray="3 2"/>
+  <text x="450" y="691" text-anchor="middle" font-size="11" font-weight="600" fill="#14532d">FunctionCallContent</text>
+  <text x="450" y="706" text-anchor="middle" font-size="10" fill="#166534">→ real MCP tool runs</text>
+
+  <!-- =================== OPENAI branch =================== -->
+  <g filter="url(#soft-shadow)">
+    <rect x="680" y="568" width="540" height="170" rx="10" fill="url(#openai-grad)" stroke="#2563eb" stroke-width="1.5"/>
+  </g>
+  <text x="700" y="592" font-size="14" font-weight="700" fill="#1e3a8a">OPENAI MODE — "Provider": "OpenAI"</text>
+  <text x="700" y="612" font-size="11" fill="#1e40af">Requires OPENAI_API_KEY · Outbound HTTPS to api.openai.com</text>
+
+  <rect x="700" y="624" width="500" height="100" rx="8" fill="#ffffff" stroke="#2563eb"/>
+  <text x="950" y="645" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">OpenAIClient.AsIChatClient()</text>
+  <text x="950" y="664" text-anchor="middle" font-size="11" fill="#1e40af">gpt-4o-mini · gpt-4o</text>
+
+  <rect x="720" y="676" width="220" height="38" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-dasharray="3 2"/>
+  <text x="830" y="691" text-anchor="middle" font-size="11" font-weight="600" fill="#1e3a8a">LLM-generated text</text>
+  <text x="830" y="706" text-anchor="middle" font-size="10" fill="#1e40af">+ JSON command</text>
+
+  <rect x="960" y="676" width="220" height="38" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-dasharray="3 2"/>
+  <text x="1070" y="691" text-anchor="middle" font-size="11" font-weight="600" fill="#1e3a8a">LLM tool calls</text>
+  <text x="1070" y="706" text-anchor="middle" font-size="10" fill="#1e40af">→ real MCP tool runs</text>
+
+  <!-- =================== Shared back-down arrow =================== -->
+  <line x1="330" y1="738" x2="330" y2="775" stroke="#16a34a" stroke-width="2"/>
+  <line x1="950" y1="738" x2="950" y2="775" stroke="#2563eb" stroke-width="2"/>
+  <line x1="330" y1="775" x2="950" y2="775" stroke="#334155" stroke-width="1.6"/>
+  <line x1="640" y1="775" x2="640" y2="800" stroke="#334155" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <text x="660" y="794" font-size="10" fill="#475569" font-style="italic">Same downstream — independent of provider</text>
+
+  <!-- =================== MCP Server =================== -->
+  <g filter="url(#soft-shadow)">
+    <rect x="60" y="800" width="1160" height="150" rx="10" fill="#ffffff" stroke="#94a3b8"/>
+  </g>
+  <text x="80" y="823" font-size="14" font-weight="700" fill="#0f172a">McpToolClient → AgenticPA.McpServer (HTTP/SSE :7070) → AgenticPA.Services</text>
+  <text x="80" y="841" font-size="11" fill="#475569">Tools auto-invoked by UseFunctionInvocation regardless of which IChatClient emitted the call</text>
+
+  <!-- Tool boxes -->
+  <g font-size="10" fill="#0f172a">
+    <rect x="80" y="855" width="170" height="36" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="165" y="870" text-anchor="middle" font-weight="600">MemberTools</text>
+    <text x="165" y="884" text-anchor="middle" fill="#475569">search_members, get_member_context</text>
+
+    <rect x="260" y="855" width="170" height="36" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="345" y="870" text-anchor="middle" font-weight="600">ProcedureTools</text>
+    <text x="345" y="884" text-anchor="middle" fill="#475569">search_procedure_codes, ...</text>
+
+    <rect x="440" y="855" width="170" height="36" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="525" y="870" text-anchor="middle" font-weight="600">ProviderTools</text>
+    <text x="525" y="884" text-anchor="middle" fill="#475569">search_providers, verify_network</text>
+
+    <rect x="620" y="855" width="170" height="36" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="705" y="870" text-anchor="middle" font-weight="600">FacilityTools</text>
+    <text x="705" y="884" text-anchor="middle" fill="#475569">search_facilities, validate_pos</text>
+
+    <rect x="800" y="855" width="200" height="36" rx="5" fill="#fee2e2" stroke="#ef4444"/>
+    <text x="900" y="870" text-anchor="middle" font-weight="600" fill="#7f1d1d">RulesTools (deterministic)</text>
+    <text x="900" y="884" text-anchor="middle" fill="#7f1d1d">preview_criteria_evaluation, submit_pa</text>
+
+    <rect x="1010" y="855" width="200" height="36" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="1110" y="870" text-anchor="middle" font-weight="600">Diagnosis · Policy · Audit</text>
+    <text x="1110" y="884" text-anchor="middle" fill="#475569">ICD-10, policies, audit log</text>
+  </g>
+
+  <!-- Seed data -->
+  <g font-size="10" fill="#475569">
+    <rect x="80" y="903" width="1130" height="36" rx="5" fill="#fef3c7" stroke="#eab308"/>
+    <text x="100" y="921" font-weight="600" fill="#713f12">Seed JSON (AgenticPA.Services/Data):</text>
+    <text x="280" y="921" fill="#713f12">members.json · procedures.json · providers.json · facilities.json · diagnoses.json · criteria-rules.json · policies.json</text>
+    <text x="100" y="934" font-style="italic">No mocks — the rules engine, MCP server, and seed data are identical in both modes. Only the LLM call is replaced.</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(40,948)" font-size="10" fill="#475569">
+    <rect x="0" y="-10" width="14" height="14" rx="3" fill="url(#demo-grad)" stroke="#16a34a"/>
+    <text x="20" y="0">Demo branch</text>
+    <rect x="100" y="-10" width="14" height="14" rx="3" fill="url(#openai-grad)" stroke="#2563eb"/>
+    <text x="120" y="0">OpenAI branch</text>
+    <rect x="210" y="-10" width="14" height="14" rx="3" fill="#fef3c7" stroke="#eab308"/>
+    <text x="230" y="0">Shared infra</text>
+    <rect x="320" y="-10" width="14" height="14" rx="3" fill="#fee2e2" stroke="#ef4444"/>
+    <text x="340" y="0">Deterministic decision (never LLM)</text>
+  </g>
+</svg>

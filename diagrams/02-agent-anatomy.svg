@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 920" font-family="'Inter Tight','Segoe UI',sans-serif">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fafafa"/>
+      <stop offset="100%" stop-color="#f3f4f6"/>
+    </linearGradient>
+    <marker id="arr2" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto">
+      <path d="M 0 1 L 11 6 L 0 11 z" fill="#475569"/>
+    </marker>
+    <filter id="shadow2" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <rect width="1400" height="920" fill="url(#bg2)"/>
+
+  <text x="60" y="60" font-size="28" font-weight="700" fill="#0f172a">How one chat turn produces one PA workflow step</text>
+  <text x="60" y="86" font-size="14" fill="#64748b">User message → MAF agent → MCP tools → deterministic rules engine → state machine transition</text>
+
+  <!-- Step 1: User -->
+  <g transform="translate(60, 140)">
+    <rect width="220" height="80" rx="10" fill="#0f172a" filter="url(#shadow2)"/>
+    <text x="110" y="32" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">1. Operator types</text>
+    <text x="110" y="54" text-anchor="middle" font-size="11" fill="#cbd5e1">"I need a PA for Jane Smith"</text>
+    <text x="110" y="68" text-anchor="middle" font-size="10" fill="#94a3b8">user message</text>
+  </g>
+  <line x1="280" y1="180" x2="340" y2="180" stroke="#475569" stroke-width="2" marker-end="url(#arr2)"/>
+
+  <!-- Step 2: Orchestrator -->
+  <g transform="translate(340, 140)">
+    <rect width="240" height="80" rx="10" fill="#3b82f6" filter="url(#shadow2)"/>
+    <text x="120" y="30" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">2. Orchestrator</text>
+    <text x="120" y="50" text-anchor="middle" font-size="11" fill="#dbeafe">Looks up current PaState</text>
+    <text x="120" y="66" text-anchor="middle" font-size="11" fill="#dbeafe">routes to that state's skill</text>
+  </g>
+  <line x1="580" y1="180" x2="640" y2="180" stroke="#475569" stroke-width="2" marker-end="url(#arr2)"/>
+
+  <!-- Step 3: Skill builds AIAgent -->
+  <g transform="translate(640, 80)">
+    <rect width="480" height="200" rx="10" fill="#ffffff" stroke="#3b82f6" stroke-width="2" filter="url(#shadow2)"/>
+    <text x="20" y="28" font-size="14" font-weight="700" fill="#1e40af">3. Skill builds MAF ChatClientAgent (per turn)</text>
+
+    <g transform="translate(20, 44)">
+      <rect width="440" height="44" rx="6" fill="#fef3c7"/>
+      <text x="14" y="20" font-size="12" font-weight="700" fill="#78350f">a. Rubric loader</text>
+      <text x="14" y="36" font-size="10" fill="#78350f">Loads skills/member-search-rubric.md + resolves {{include:}}s</text>
+    </g>
+
+    <g transform="translate(20, 96)">
+      <rect width="440" height="44" rx="6" fill="#dbeafe"/>
+      <text x="14" y="20" font-size="12" font-weight="700" fill="#1e40af">b. McpToolClient.ToolsNamed(...)</text>
+      <text x="14" y="36" font-size="10" fill="#1e40af">whitelists tools · wraps submit_pa with ApprovalRequiredAIFunction</text>
+    </g>
+
+    <g transform="translate(20, 148)">
+      <rect width="440" height="44" rx="6" fill="#e0e7ff"/>
+      <text x="14" y="20" font-size="12" font-weight="700" fill="#3730a3">c. new ChatClientAgent(client, name, instructions, tools)</text>
+      <text x="14" y="36" font-size="10" fill="#3730a3">Microsoft.Agents.AI 1.6 — provider-agnostic agent abstraction</text>
+    </g>
+  </g>
+  <line x1="1120" y1="180" x2="1180" y2="180" stroke="#475569" stroke-width="2" marker-end="url(#arr2)"/>
+
+  <!-- Step 4: OpenAI loop with tools -->
+  <g transform="translate(1180, 80)">
+    <rect width="180" height="200" rx="10" fill="#10b981" filter="url(#shadow2)"/>
+    <text x="90" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">4. OpenAI</text>
+    <text x="90" y="48" text-anchor="middle" font-size="11" fill="#ecfdf5">chat.completions</text>
+    <text x="90" y="64" text-anchor="middle" font-size="11" fill="#ecfdf5">tool_calls</text>
+
+    <text x="90" y="100" text-anchor="middle" font-size="10" fill="#ecfdf5">Loop while tools called:</text>
+    <text x="90" y="116" text-anchor="middle" font-size="10" fill="#ecfdf5">1. Model emits tool_call</text>
+    <text x="90" y="130" text-anchor="middle" font-size="10" fill="#ecfdf5">2. UseFunctionInvocation</text>
+    <text x="90" y="144" text-anchor="middle" font-size="10" fill="#ecfdf5">   middleware runs MCP tool</text>
+    <text x="90" y="158" text-anchor="middle" font-size="10" fill="#ecfdf5">3. Result fed back to model</text>
+    <text x="90" y="180" text-anchor="middle" font-size="10" fill="#ecfdf5">→ final assistant reply</text>
+  </g>
+
+  <!-- Tool flow downward -->
+  <line x1="1270" y1="280" x2="1270" y2="360" stroke="#475569" stroke-width="2" marker-end="url(#arr2)"/>
+
+  <!-- Step 5: MCP server -->
+  <g transform="translate(640, 360)">
+    <rect width="720" height="180" rx="10" fill="#ffffff" stroke="#3b82f6" stroke-width="2" filter="url(#shadow2)"/>
+    <text x="20" y="28" font-size="14" font-weight="700" fill="#1e40af">5. MCP server invokes the right tool</text>
+    <text x="20" y="48" font-size="11" fill="#64748b">25 tools across 6 categories — agents see only the ones their rubric whitelists</text>
+
+    <g transform="translate(20, 64)">
+      <rect width="220" height="46" rx="6" fill="#dbeafe"/>
+      <text x="14" y="20" font-size="11" font-weight="700" fill="#1e40af">Member · Procedure</text>
+      <text x="14" y="38" font-size="10" fill="#1e40af">search_members, get_member_context, …</text>
+
+      <rect x="234" width="220" height="46" rx="6" fill="#dbeafe"/>
+      <text x="248" y="20" font-size="11" font-weight="700" fill="#1e40af">Provider · Facility</text>
+      <text x="248" y="38" font-size="10" fill="#1e40af">search_providers, validate_pos_for_cpt, …</text>
+
+      <rect x="468" width="220" height="46" rx="6" fill="#dbeafe"/>
+      <text x="482" y="20" font-size="11" font-weight="700" fill="#1e40af">Diagnosis · Policy</text>
+      <text x="482" y="38" font-size="10" fill="#1e40af">search_icd10_hierarchy, get_policy_text, …</text>
+    </g>
+
+    <g transform="translate(20, 122)">
+      <rect width="688" height="44" rx="6" fill="#fef3c7"/>
+      <text x="14" y="20" font-size="12" font-weight="700" fill="#78350f">Rules engine + Audit (deterministic — LLM-free)</text>
+      <text x="14" y="38" font-size="10" fill="#78350f">preview_criteria_evaluation · submit_pa · audit_submission — reads criteria-rules.json + policies.json</text>
+    </g>
+  </g>
+
+  <!-- Step 6: Skill parses response -->
+  <g transform="translate(640, 580)">
+    <rect width="720" height="120" rx="10" fill="#ffffff" stroke="#3b82f6" stroke-width="2" filter="url(#shadow2)"/>
+    <text x="20" y="28" font-size="14" font-weight="700" fill="#1e40af">6. Skill extracts the JSON command from the reply</text>
+    <text x="20" y="50" font-size="11" fill="#64748b">Every rubric mandates a fenced JSON block per Grid 7:</text>
+    <g transform="translate(20, 62)">
+      <rect width="688" height="46" rx="6" fill="#0f172a"/>
+      <text x="14" y="20" font-size="11" font-family="monospace" fill="#a5b4fc">```json</text>
+      <text x="14" y="34" font-size="11" font-family="monospace" fill="#a5b4fc">{ "action": "set_member", "memberId": "M1001" }</text>
+      <text x="14" y="50" font-size="11" font-family="monospace" fill="#a5b4fc">```</text>
+    </g>
+  </g>
+  <line x1="1000" y1="700" x2="1000" y2="740" stroke="#475569" stroke-width="2" marker-end="url(#arr2)"/>
+
+  <!-- Step 7: State machine transitions -->
+  <g transform="translate(640, 740)">
+    <rect width="720" height="140" rx="10" fill="#fce7f3" filter="url(#shadow2)"/>
+    <text x="20" y="28" font-size="14" font-weight="700" fill="#831843">7. PaWorkflowEngine applies the command</text>
+    <text x="20" y="50" font-size="11" fill="#831843">Pure-function transition; throws InvalidTransitionException if illegal</text>
+
+    <g transform="translate(20, 64)">
+      <rect width="100" height="58" rx="6" fill="#ec4899"/>
+      <text x="50" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">Member</text>
+      <text x="50" y="40" text-anchor="middle" font-size="10" fill="#fce7f3">M1001 ✓</text>
+
+      <text x="135" y="50" font-size="20" fill="#831843">→</text>
+
+      <rect x="160" width="100" height="58" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+      <text x="210" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#831843">Procedure</text>
+      <text x="210" y="40" text-anchor="middle" font-size="10" fill="#831843">(now current)</text>
+
+      <text x="275" y="50" font-size="20" fill="#831843">→</text>
+
+      <rect x="300" width="100" height="58" rx="6" fill="#fce7f3" stroke="#ec4899" stroke-dasharray="3 3"/>
+      <text x="350" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#831843">Provider</text>
+      <text x="350" y="40" text-anchor="middle" font-size="10" fill="#831843">(pending)</text>
+
+      <text x="415" y="50" font-size="20" fill="#831843">…</text>
+
+      <rect x="445" width="120" height="58" rx="6" fill="#fce7f3" stroke="#ec4899" stroke-dasharray="3 3"/>
+      <text x="505" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#831843">Preflight → Submit</text>
+      <text x="505" y="40" text-anchor="middle" font-size="10" fill="#831843">rules engine</text>
+
+      <text x="580" y="50" font-size="20" fill="#831843">→</text>
+
+      <rect x="608" width="80" height="58" rx="6" fill="#fce7f3" stroke="#ec4899" stroke-dasharray="3 3"/>
+      <text x="648" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#831843">Done</text>
+      <text x="648" y="40" text-anchor="middle" font-size="10" fill="#831843">case id</text>
+    </g>
+  </g>
+
+  <!-- Side panel: why rebuild agent per turn -->
+  <g transform="translate(60, 360)">
+    <rect width="560" height="180" rx="10" fill="#ffffff" stroke="#fbbf24" stroke-width="1.5" filter="url(#shadow2)"/>
+    <text x="20" y="28" font-size="14" font-weight="700" fill="#78350f">Why ChatClientAgent is built per turn</text>
+    <text x="20" y="50" font-size="11" fill="#78350f">• Rubric files can change between turns (dev mode = live reload)</text>
+    <text x="20" y="68" font-size="11" fill="#78350f">• Tool allow-list is per-skill — bake it into the agent at construction</text>
+    <text x="20" y="86" font-size="11" fill="#78350f">• Approval-required wrapping is applied at tool-fetch time</text>
+    <text x="20" y="104" font-size="11" fill="#78350f">• No long-lived agent state — workflow state lives in PaWorkflowContext</text>
+    <text x="20" y="122" font-size="11" fill="#78350f">• Cost: ~&lt;1ms per turn (in-memory)</text>
+    <text x="20" y="148" font-size="10" fill="#78350f" font-style="italic">Same pattern as Section 6 sample (FunctionCall) — agent is a thin coordinator</text>
+    <text x="20" y="164" font-size="10" fill="#78350f" font-style="italic">around the chat client, message list, and tool list.</text>
+  </g>
+
+  <!-- Side panel: confirmation gate -->
+  <g transform="translate(60, 580)">
+    <rect width="560" height="180" rx="10" fill="#ffffff" stroke="#ec4899" stroke-width="1.5" filter="url(#shadow2)"/>
+    <text x="20" y="28" font-size="14" font-weight="700" fill="#831843">Confirmation gate per step</text>
+    <text x="20" y="50" font-size="11" fill="#831843">The state machine does NOT advance on a single "proposed" turn.</text>
+    <text x="20" y="68" font-size="11" fill="#831843">Skill rubrics require:</text>
+    <text x="40" y="86" font-size="11" fill="#831843">1. Show "Proposed X" bullet list + ask "yes / no"</text>
+    <text x="40" y="104" font-size="11" fill="#831843">2. Only emit set_X JSON when operator explicitly confirms</text>
+    <text x="40" y="122" font-size="11" fill="#831843">3. Fallback: if LLM forgets the JSON, Chat.razor synthesizes it</text>
+    <text x="20" y="146" font-size="10" fill="#831843" font-style="italic">Operators can also click any prior state in the left rail to rewind</text>
+    <text x="20" y="162" font-size="10" fill="#831843" font-style="italic">→ GoToStateCommand clears downstream slots.</text>
+  </g>
+
+  <text x="60" y="900" font-size="10" fill="#94a3b8">Diagram: agentic-pa-intake / 02-agent-anatomy</text>
+</svg>

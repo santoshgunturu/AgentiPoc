@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 920" font-family="'Inter Tight','Segoe UI',sans-serif">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fafafa"/>
+      <stop offset="100%" stop-color="#f3f4f6"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto">
+      <path d="M 0 1 L 11 6 L 0 11 z" fill="#475569"/>
+    </marker>
+    <marker id="arrow-light" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto">
+      <path d="M 0 1 L 11 6 L 0 11 z" fill="#94a3b8"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <rect width="1400" height="920" fill="url(#bgGrad)"/>
+
+  <!-- Title block -->
+  <text x="60" y="60" font-size="28" font-weight="700" fill="#0f172a">Agentic PA Intake — System Architecture</text>
+  <text x="60" y="86" font-size="14" fill="#64748b">.NET 10 · Microsoft Agent Framework · MCP · .NET Aspire · OpenAI</text>
+
+  <!-- LEGEND -->
+  <g transform="translate(960, 50)">
+    <rect width="380" height="58" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="14" y="20" font-size="11" font-weight="700" fill="#334155">LEGEND</text>
+    <rect x="14"  y="30" width="14" height="14" rx="3" fill="#3b82f6"/><text x="34"  y="42" font-size="11" fill="#334155">Process / service</text>
+    <rect x="160" y="30" width="14" height="14" rx="3" fill="#fbbf24"/><text x="180" y="42" font-size="11" fill="#334155">Library / data</text>
+    <rect x="290" y="30" width="14" height="14" rx="3" fill="#10b981"/><text x="310" y="42" font-size="11" fill="#334155">External</text>
+  </g>
+
+  <!-- Operator / user -->
+  <g transform="translate(60, 160)">
+    <rect width="160" height="80" rx="10" fill="#ffffff" stroke="#64748b" stroke-width="1.5" filter="url(#shadow)"/>
+    <text x="80" y="30" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">Operator</text>
+    <text x="80" y="50" text-anchor="middle" font-size="11" fill="#64748b">Intake Coordinator</text>
+    <text x="80" y="65" text-anchor="middle" font-size="11" fill="#64748b">UM Nurse · Physician</text>
+  </g>
+
+  <!-- Other agents (A2A) -->
+  <g transform="translate(60, 280)">
+    <rect width="160" height="60" rx="10" fill="#ffffff" stroke="#64748b" stroke-width="1.5" filter="url(#shadow)"/>
+    <text x="80" y="28" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">Other agents</text>
+    <text x="80" y="46" text-anchor="middle" font-size="10" fill="#64748b">A2A clients (.NET / Python)</text>
+  </g>
+
+  <!-- 3rd party callers -->
+  <g transform="translate(60, 380)">
+    <rect width="160" height="60" rx="10" fill="#ffffff" stroke="#64748b" stroke-width="1.5" filter="url(#shadow)"/>
+    <text x="80" y="28" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">OpenAI SDK clients</text>
+    <text x="80" y="46" text-anchor="middle" font-size="10" fill="#64748b">via /v1/responses</text>
+  </g>
+
+  <!-- ========================= -->
+  <!-- ASPIRE APP HOST CONTAINER  -->
+  <!-- ========================= -->
+  <g transform="translate(280, 140)">
+    <rect width="780" height="660" rx="14" fill="#ffffff" stroke="#3b82f6" stroke-width="2" stroke-dasharray="6 4" filter="url(#shadow)"/>
+    <text x="20" y="32" font-size="14" font-weight="700" fill="#1e40af">AgenticPA.AppHost (.NET Aspire DistributedApplication)</text>
+    <text x="20" y="50" font-size="11" fill="#64748b">Service discovery · OTel collector · dashboard at :15279</text>
+
+    <!-- Web container -->
+    <g transform="translate(20, 80)">
+      <rect width="430" height="560" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+      <text x="16" y="26" font-size="13" font-weight="700" fill="#1e40af">AgenticPA.Web (Blazor + APIs)</text>
+      <text x="16" y="42" font-size="10" fill="#64748b">ASP.NET Core · port 8080 (container)</text>
+
+      <!-- ChatClient -->
+      <g transform="translate(16, 60)">
+        <rect width="398" height="60" rx="8" fill="#fbbf24" opacity="0.9"/>
+        <text x="14" y="22" font-size="12" font-weight="700" fill="#78350f">IChatClient (OpenTelemetry-wrapped)</text>
+        <text x="14" y="40" font-size="10" fill="#78350f">UseFunctionInvocation · UseOpenTelemetry · UseLoggingMiddleware</text>
+        <text x="14" y="54" font-size="10" fill="#78350f">gpt-4o / gpt-4o-mini / Demo (no-LLM scripted mode)</text>
+      </g>
+
+      <!-- Agents -->
+      <g transform="translate(16, 132)">
+        <rect width="398" height="148" rx="8" fill="#dbeafe" stroke="#3b82f6"/>
+        <text x="14" y="22" font-size="12" font-weight="700" fill="#1e40af">Agent registry (8 keyed ChatClientAgents)</text>
+        <text x="14" y="40" font-size="10" fill="#1e40af">builder.AddAIAgent(name, factory).AddA2AServer()</text>
+
+        <g transform="translate(14, 50)">
+          <rect width="120" height="22" rx="5" fill="#3b82f6"/><text x="60" y="16" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">MemberAgent</text>
+          <rect x="130" width="120" height="22" rx="5" fill="#3b82f6"/><text x="190" y="16" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">ProcedureAgent</text>
+          <rect x="260" width="120" height="22" rx="5" fill="#3b82f6"/><text x="320" y="16" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">ProviderAgent</text>
+
+          <rect y="30" width="120" height="22" rx="5" fill="#3b82f6"/><text x="60" y="46" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">FacilityAgent</text>
+          <rect x="130" y="30" width="120" height="22" rx="5" fill="#3b82f6"/><text x="190" y="46" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">ClinicalAgent</text>
+          <rect x="260" y="30" width="120" height="22" rx="5" fill="#3b82f6"/><text x="320" y="46" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">PreflightAgent</text>
+
+          <rect y="60" width="120" height="22" rx="5" fill="#3b82f6"/><text x="60" y="76" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">SubmitAgent</text>
+          <rect x="130" y="60" width="120" height="22" rx="5" fill="#3b82f6"/><text x="190" y="76" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">DoneAgent</text>
+        </g>
+      </g>
+
+      <!-- Rubrics + governance -->
+      <g transform="translate(16, 290)">
+        <rect width="398" height="78" rx="8" fill="#fef3c7"/>
+        <text x="14" y="22" font-size="12" font-weight="700" fill="#78350f">Rubric system (skills/*.md)</text>
+        <text x="14" y="40" font-size="10" fill="#78350f">9 rubrics with {{include:}} resolution · live-reload (dev) · nightly atomic refresh (prod)</text>
+        <text x="14" y="58" font-size="10" fill="#78350f">Shared: phi-protection · verification · conversation-rules</text>
+        <text x="14" y="72" font-size="10" fill="#78350f">+ ToolApprovalPolicy gates submit_pa, audit_submission</text>
+      </g>
+
+      <!-- Workflows -->
+      <g transform="translate(16, 378)">
+        <rect width="398" height="70" rx="8" fill="#e0e7ff"/>
+        <text x="14" y="22" font-size="12" font-weight="700" fill="#3730a3">Workflows</text>
+        <text x="14" y="40" font-size="10" fill="#3730a3">PaWorkflowEngine (interactive · state machine · confirmation gates)</text>
+        <text x="14" y="56" font-size="10" fill="#3730a3">PaExpressWorkflow (MAF AgentWorkflowBuilder · single-shot API)</text>
+      </g>
+
+      <!-- Sessions -->
+      <g transform="translate(16, 458)">
+        <rect width="398" height="50" rx="8" fill="#fce7f3"/>
+        <text x="14" y="22" font-size="12" font-weight="700" fill="#831843">Session persistence</text>
+        <text x="14" y="40" font-size="10" fill="#831843">ISessionRepository → InMemory (dev) | Cosmos / Redis (prod)</text>
+      </g>
+
+      <!-- Endpoints -->
+      <g transform="translate(16, 518)">
+        <rect width="398" height="34" rx="8" fill="#1e40af"/>
+        <text x="200" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">
+          / · /devui · /v1/responses · /v1/conversations · /a2a/* · /api/express-pa
+        </text>
+      </g>
+    </g>
+
+    <!-- MCP server container -->
+    <g transform="translate(470, 80)">
+      <rect width="290" height="320" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+      <text x="16" y="26" font-size="13" font-weight="700" fill="#1e40af">AgenticPA.McpServer</text>
+      <text x="16" y="42" font-size="10" fill="#64748b">ModelContextProtocol.AspNetCore · port 7070</text>
+
+      <g transform="translate(16, 60)">
+        <rect width="258" height="240" rx="8" fill="#dbeafe"/>
+        <text x="14" y="22" font-size="12" font-weight="700" fill="#1e40af">25 MCP tools (over HTTP/SSE)</text>
+        <text x="14" y="42" font-size="10" fill="#1e40af" font-weight="600">Member · Procedure · Provider · Facility</text>
+        <text x="14" y="58" font-size="10" fill="#1e40af">search_members, get_member_context,</text>
+        <text x="14" y="72" font-size="10" fill="#1e40af">search_anthem_bc_enrollments, …</text>
+
+        <text x="14" y="98" font-size="10" fill="#1e40af" font-weight="600">Diagnosis</text>
+        <text x="14" y="114" font-size="10" fill="#1e40af">search_icd10_hierarchy, validate_icd_procedure_pairing</text>
+
+        <text x="14" y="140" font-size="10" fill="#1e40af" font-weight="600">Rules engine (deterministic)</text>
+        <text x="14" y="156" font-size="10" fill="#1e40af">preview_criteria_evaluation, submit_pa</text>
+
+        <text x="14" y="182" font-size="10" fill="#1e40af" font-weight="600">Policy · Audit</text>
+        <text x="14" y="198" font-size="10" fill="#1e40af">get_policy_text, audit_submission</text>
+
+        <text x="14" y="224" font-size="9" fill="#475569" font-style="italic">All tools read seed JSON in /Data</text>
+      </g>
+    </g>
+
+    <!-- ServiceDefaults note -->
+    <g transform="translate(470, 412)">
+      <rect width="290" height="100" rx="10" fill="#fef3c7"/>
+      <text x="16" y="22" font-size="12" font-weight="700" fill="#78350f">AgenticPA.ServiceDefaults</text>
+      <text x="16" y="40" font-size="10" fill="#78350f">OpenTelemetry traces + metrics + logs</text>
+      <text x="16" y="56" font-size="10" fill="#78350f">Subscribes to *Microsoft.Extensions.AI</text>
+      <text x="16" y="72" font-size="10" fill="#78350f">HTTP resilience: 5-min total / 3-min per attempt</text>
+      <text x="16" y="88" font-size="10" fill="#78350f">/health · /alive (Dev only)</text>
+    </g>
+
+    <!-- Aspire dashboard note -->
+    <g transform="translate(470, 524)">
+      <rect width="290" height="116" rx="10" fill="#e0e7ff"/>
+      <text x="16" y="22" font-size="12" font-weight="700" fill="#3730a3">Aspire dashboard (:15279)</text>
+      <text x="16" y="40" font-size="10" fill="#3730a3">Per-turn OTel traces with GenAI spans</text>
+      <text x="16" y="56" font-size="10" fill="#3730a3">Tool call/result spans · model latency</text>
+      <text x="16" y="72" font-size="10" fill="#3730a3">Service discovery: Web → MCP via name</text>
+      <text x="16" y="92" font-size="10" fill="#3730a3" font-weight="600">Click "DevUI" link → /devui playground</text>
+    </g>
+  </g>
+
+  <!-- External: OpenAI -->
+  <g transform="translate(1180, 200)">
+    <rect width="170" height="100" rx="10" fill="#10b981" filter="url(#shadow)"/>
+    <text x="85" y="34" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">OpenAI / Azure OpenAI</text>
+    <text x="85" y="56" text-anchor="middle" font-size="11" fill="#ecfdf5">gpt-4o · gpt-4o-mini</text>
+    <text x="85" y="72" text-anchor="middle" font-size="11" fill="#ecfdf5">Chat completions + tool use</text>
+    <text x="85" y="88" text-anchor="middle" font-size="10" fill="#ecfdf5">HTTPS · API key</text>
+  </g>
+
+  <!-- External: future Qdrant -->
+  <g transform="translate(1180, 340)">
+    <rect width="170" height="80" rx="10" fill="#10b981" opacity="0.4" stroke="#10b981" stroke-dasharray="5 3" filter="url(#shadow)"/>
+    <text x="85" y="30" text-anchor="middle" font-size="13" font-weight="700" fill="#064e3b">Qdrant (RAG)</text>
+    <text x="85" y="50" text-anchor="middle" font-size="11" fill="#064e3b">Policy semantic search</text>
+    <text x="85" y="66" text-anchor="middle" font-size="10" fill="#064e3b" font-style="italic">scaffolded — enable in prod</text>
+  </g>
+
+  <!-- External: future EHR -->
+  <g transform="translate(1180, 460)">
+    <rect width="170" height="80" rx="10" fill="#10b981" opacity="0.4" stroke="#10b981" stroke-dasharray="5 3" filter="url(#shadow)"/>
+    <text x="85" y="30" text-anchor="middle" font-size="13" font-weight="700" fill="#064e3b">EHR / payer</text>
+    <text x="85" y="50" text-anchor="middle" font-size="11" fill="#064e3b">FHIR / HL7</text>
+    <text x="85" y="66" text-anchor="middle" font-size="10" fill="#064e3b" font-style="italic">future integration</text>
+  </g>
+
+  <!-- Arrows -->
+  <!-- Operator → Blazor -->
+  <line x1="220" y1="200" x2="296" y2="200" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="230" y="194" font-size="10" fill="#475569" font-weight="600">/</text>
+
+  <!-- A2A clients → A2A endpoint -->
+  <line x1="220" y1="310" x2="296" y2="310" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="230" y="304" font-size="10" fill="#475569" font-weight="600">/a2a/*</text>
+
+  <!-- OpenAI SDK clients → /v1/responses -->
+  <line x1="220" y1="410" x2="296" y2="410" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="230" y="404" font-size="10" fill="#475569" font-weight="600">/v1/responses</text>
+
+  <!-- Web → OpenAI -->
+  <line x1="730" y1="220" x2="1180" y2="240" stroke="#10b981" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="960" y="220" font-size="10" fill="#047857" font-weight="600">HTTPS · gpt-4o</text>
+
+  <!-- Web → MCP -->
+  <line x1="450" y1="380" x2="486" y2="380" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="416" y="370" font-size="10" fill="#475569" font-weight="600">MCP/HTTP</text>
+
+  <!-- Web → Qdrant (dashed future) -->
+  <line x1="900" y1="700" x2="1180" y2="400" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow-light)" opacity="0.7"/>
+
+  <!-- Footer -->
+  <text x="60" y="860" font-size="11" fill="#64748b" font-style="italic">All boxes inside the dashed blue boundary are orchestrated by a single dotnet run --project AppHost command.</text>
+  <text x="60" y="878" font-size="11" fill="#64748b" font-style="italic">External boxes: OpenAI is required. Qdrant + EHR are scaffolded — wire them in for production.</text>
+  <text x="60" y="896" font-size="10" fill="#94a3b8">Diagram: agentic-pa-intake / 01-system-architecture</text>
+</svg>

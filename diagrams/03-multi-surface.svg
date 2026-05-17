@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" font-family="'Inter Tight','Segoe UI',sans-serif">
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fafafa"/>
+      <stop offset="100%" stop-color="#f3f4f6"/>
+    </linearGradient>
+    <marker id="arr3" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto">
+      <path d="M 0 1 L 11 6 L 0 11 z" fill="#475569"/>
+    </marker>
+    <filter id="shadow3" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <rect width="1400" height="900" fill="url(#bg3)"/>
+
+  <text x="60" y="60" font-size="28" font-weight="700" fill="#0f172a">One agent registry. Five callers. Zero duplication.</text>
+  <text x="60" y="86" font-size="14" fill="#64748b">Every PA workflow agent is reachable via five protocols — the same instructions, tools, and rubric govern all of them.</text>
+
+  <!-- CENTER: Agent registry -->
+  <g transform="translate(450, 280)">
+    <rect width="500" height="280" rx="14" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5" filter="url(#shadow3)"/>
+    <text x="250" y="34" text-anchor="middle" font-size="16" font-weight="700" fill="#1e40af">Agent registry</text>
+    <text x="250" y="54" text-anchor="middle" font-size="12" fill="#64748b">builder.AddAIAgent(name, factory).AddA2AServer()</text>
+
+    <!-- 8 agents grid -->
+    <g transform="translate(28, 76)">
+      <rect width="138" height="36" rx="6" fill="#3b82f6"/>
+      <text x="69" y="22" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">MemberAgent</text>
+
+      <rect x="152" width="138" height="36" rx="6" fill="#3b82f6"/>
+      <text x="221" y="22" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">ProcedureAgent</text>
+
+      <rect x="304" width="138" height="36" rx="6" fill="#3b82f6"/>
+      <text x="373" y="22" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">ProviderAgent</text>
+
+      <rect y="48" width="138" height="36" rx="6" fill="#3b82f6"/>
+      <text x="69" y="70" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">FacilityAgent</text>
+
+      <rect x="152" y="48" width="138" height="36" rx="6" fill="#3b82f6"/>
+      <text x="221" y="70" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">ClinicalAgent</text>
+
+      <rect x="304" y="48" width="138" height="36" rx="6" fill="#3b82f6"/>
+      <text x="373" y="70" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">PreflightAgent</text>
+
+      <rect y="96" width="138" height="36" rx="6" fill="#3b82f6"/>
+      <text x="69" y="118" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">SubmitAgent</text>
+
+      <rect x="152" y="96" width="138" height="36" rx="6" fill="#3b82f6"/>
+      <text x="221" y="118" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">DoneAgent</text>
+
+      <rect x="304" y="96" width="138" height="36" rx="6" fill="#fbbf24"/>
+      <text x="373" y="116" text-anchor="middle" font-size="11" font-weight="700" fill="#78350f">+ NEW: 1 line away</text>
+    </g>
+
+    <text x="250" y="240" text-anchor="middle" font-size="11" fill="#64748b">Backed by one IChatClient · 25 MCP tools · rubric files</text>
+    <text x="250" y="258" text-anchor="middle" font-size="11" fill="#64748b">Plus 2 workflows: PaWorkflowEngine (interactive) + PaExpressWorkflow (MAF)</text>
+  </g>
+
+  <!-- ============================ -->
+  <!-- 5 SURFACES around the registry -->
+  <!-- ============================ -->
+
+  <!-- 1. Blazor UI (top-left) -->
+  <g transform="translate(60, 140)">
+    <rect width="280" height="180" rx="12" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" filter="url(#shadow3)"/>
+    <text x="20" y="32" font-size="13" font-weight="700" fill="#0f172a">1. Blazor chat UI</text>
+    <text x="20" y="50" font-size="11" fill="#64748b">Path: /</text>
+    <text x="20" y="76" font-size="11" fill="#334155">Interactive PA intake with confirmation</text>
+    <text x="20" y="92" font-size="11" fill="#334155">gates, rewind, sidebar progress.</text>
+    <text x="20" y="118" font-size="11" fill="#334155">Drives PaWorkflowEngine via the</text>
+    <text x="20" y="134" font-size="11" fill="#334155">SkillBase + Orchestrator stack.</text>
+    <text x="20" y="160" font-size="11" font-style="italic" fill="#0f172a">Audience: intake coordinators</text>
+  </g>
+  <line x1="340" y1="240" x2="446" y2="340" stroke="#475569" stroke-width="2" marker-end="url(#arr3)"/>
+
+  <!-- 2. DevUI (top) -->
+  <g transform="translate(560, 60)">
+    <rect width="280" height="180" rx="12" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" filter="url(#shadow3)"/>
+    <text x="20" y="32" font-size="13" font-weight="700" fill="#0f172a">2. DevUI playground</text>
+    <text x="20" y="50" font-size="11" fill="#64748b">Path: /devui</text>
+    <text x="20" y="76" font-size="11" fill="#334155">Microsoft.Agents.AI.DevUI</text>
+    <text x="20" y="92" font-size="11" fill="#334155">Dropdown to test any single agent</text>
+    <text x="20" y="108" font-size="11" fill="#334155">in isolation. Live tool-call inspector.</text>
+    <text x="20" y="134" font-size="11" font-style="italic" fill="#0f172a">Audience: prompt engineers,</text>
+    <text x="20" y="148" font-size="11" font-style="italic" fill="#0f172a">QA, rubric authors</text>
+  </g>
+  <line x1="700" y1="240" x2="700" y2="278" stroke="#475569" stroke-width="2" marker-end="url(#arr3)"/>
+
+  <!-- 3. OpenAI REST (top-right) -->
+  <g transform="translate(1060, 140)">
+    <rect width="280" height="180" rx="12" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" filter="url(#shadow3)"/>
+    <text x="20" y="32" font-size="13" font-weight="700" fill="#0f172a">3. OpenAI-compatible REST</text>
+    <text x="20" y="50" font-size="11" fill="#64748b">Path: /v1/responses, /v1/conversations</text>
+    <text x="20" y="76" font-size="11" fill="#334155">Any OpenAI SDK (Python, TypeScript,</text>
+    <text x="20" y="92" font-size="11" fill="#334155">.NET) can talk to your agents as if</text>
+    <text x="20" y="108" font-size="11" fill="#334155">they were OpenAI itself.</text>
+    <text x="20" y="134" font-size="11" font-style="italic" fill="#0f172a">Audience: partner integrations,</text>
+    <text x="20" y="148" font-size="11" font-style="italic" fill="#0f172a">data-science notebooks</text>
+  </g>
+  <line x1="1060" y1="240" x2="954" y2="340" stroke="#475569" stroke-width="2" marker-end="url(#arr3)"/>
+
+  <!-- 4. A2A (bottom-left) -->
+  <g transform="translate(60, 580)">
+    <rect width="280" height="180" rx="12" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" filter="url(#shadow3)"/>
+    <text x="20" y="32" font-size="13" font-weight="700" fill="#0f172a">4. A2A (Agent-to-Agent)</text>
+    <text x="20" y="50" font-size="11" fill="#64748b">Path: /a2a/&lt;agent&gt;</text>
+    <text x="20" y="76" font-size="11" fill="#334155">HTTP+JSON message envelope with</text>
+    <text x="20" y="92" font-size="11" fill="#334155">streaming SSE responses.</text>
+    <text x="20" y="108" font-size="11" fill="#334155">Other agents (your triage bot, a</text>
+    <text x="20" y="124" font-size="11" fill="#334155">UM-nurse agent) can call yours.</text>
+    <text x="20" y="148" font-size="11" font-style="italic" fill="#0f172a">Audience: other agentic systems</text>
+    <text x="20" y="162" font-size="11" font-style="italic" fill="#0f172a">in the enterprise</text>
+  </g>
+  <line x1="340" y1="600" x2="446" y2="500" stroke="#475569" stroke-width="2" marker-end="url(#arr3)"/>
+
+  <!-- 5. Express PA (bottom) -->
+  <g transform="translate(560, 660)">
+    <rect width="280" height="180" rx="12" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" filter="url(#shadow3)"/>
+    <text x="20" y="32" font-size="13" font-weight="700" fill="#0f172a">5. Express PA workflow</text>
+    <text x="20" y="50" font-size="11" fill="#64748b">Path: POST /api/express-pa</text>
+    <text x="20" y="76" font-size="11" fill="#334155">MAF AgentWorkflowBuilder — no LLM.</text>
+    <text x="20" y="92" font-size="11" fill="#334155">Preflight → Submit → Audit with</text>
+    <text x="20" y="108" font-size="11" fill="#334155">conditional edge to short-circuit denies.</text>
+    <text x="20" y="134" font-size="11" font-style="italic" fill="#0f172a">Audience: batch processing,</text>
+    <text x="20" y="148" font-size="11" font-style="italic" fill="#0f172a">EHR-driven submissions</text>
+  </g>
+  <line x1="700" y1="660" x2="700" y2="562" stroke="#475569" stroke-width="2" marker-end="url(#arr3)"/>
+
+  <!-- (Bonus) Health endpoints -->
+  <g transform="translate(1060, 580)">
+    <rect width="280" height="180" rx="12" fill="#ffffff" stroke="#10b981" stroke-width="1.5" filter="url(#shadow3)"/>
+    <text x="20" y="32" font-size="13" font-weight="700" fill="#065f46">Bonus: ops surface</text>
+    <text x="20" y="50" font-size="11" fill="#64748b">/health · /alive · OTel traces</text>
+    <text x="20" y="76" font-size="11" fill="#334155">Aspire ServiceDefaults provides</text>
+    <text x="20" y="92" font-size="11" fill="#334155">health probes (Dev only by default).</text>
+    <text x="20" y="108" font-size="11" fill="#334155">OTel traces flow to the dashboard</text>
+    <text x="20" y="124" font-size="11" fill="#334155">with per-tool-call spans visible.</text>
+    <text x="20" y="148" font-size="11" font-style="italic" fill="#065f46">Audience: SRE, on-call,</text>
+    <text x="20" y="162" font-size="11" font-style="italic" fill="#065f46">compliance auditors</text>
+  </g>
+
+  <!-- Footer summary -->
+  <g transform="translate(60, 820)">
+    <rect width="1280" height="60" rx="10" fill="#0f172a" filter="url(#shadow3)"/>
+    <text x="20" y="26" font-size="13" font-weight="700" fill="#ffffff">Pluggability — adding a new skill:</text>
+    <text x="20" y="46" font-size="11" fill="#cbd5e1">1) Drop a rubric markdown.  2) Add the agent in MafAgentRegistration.AgentRubricMap.  3) Map its MCP tools.  → DevUI / A2A / OpenAI REST get the new agent for free.</text>
+  </g>
+
+  <text x="60" y="880" font-size="10" fill="#94a3b8">Diagram: agentic-pa-intake / 03-multi-surface</text>
+</svg>

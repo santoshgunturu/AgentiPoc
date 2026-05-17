@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 880" font-family="'Inter Tight','Segoe UI',sans-serif">
+  <defs>
+    <linearGradient id="bg4" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fafafa"/>
+      <stop offset="100%" stop-color="#f3f4f6"/>
+    </linearGradient>
+    <marker id="arr4" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto">
+      <path d="M 0 1 L 11 6 L 0 11 z" fill="#475569"/>
+    </marker>
+    <filter id="shadow4" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <rect width="1400" height="880" fill="url(#bg4)"/>
+
+  <text x="60" y="60" font-size="28" font-weight="700" fill="#0f172a">Deployment topology — Dev to Production</text>
+  <text x="60" y="86" font-size="14" fill="#64748b">One codebase. Three target environments. Same observability everywhere.</text>
+
+  <!-- ============================ -->
+  <!-- ENVIRONMENT 1: LOCAL DEV     -->
+  <!-- ============================ -->
+  <g transform="translate(60, 140)">
+    <rect width="420" height="660" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2" filter="url(#shadow4)"/>
+    <text x="20" y="34" font-size="16" font-weight="700" fill="#1e40af">1 · Local development</text>
+    <text x="20" y="54" font-size="12" fill="#64748b">dotnet run --project src/AgenticPA.AppHost</text>
+
+    <g transform="translate(20, 76)">
+      <rect width="380" height="120" rx="8" fill="#eff6ff" stroke="#3b82f6"/>
+      <text x="16" y="24" font-size="13" font-weight="700" fill="#1e40af">Aspire AppHost (process)</text>
+      <rect x="16" y="36" width="160" height="40" rx="5" fill="#3b82f6"/>
+      <text x="96" y="54" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">McpServer</text>
+      <text x="96" y="68" text-anchor="middle" font-size="9" fill="#dbeafe">:7070</text>
+      <rect x="200" y="36" width="160" height="40" rx="5" fill="#3b82f6"/>
+      <text x="280" y="54" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">Web (Blazor + APIs)</text>
+      <text x="280" y="68" text-anchor="middle" font-size="9" fill="#dbeafe">:5xxx (Aspire-assigned)</text>
+      <text x="16" y="98" font-size="10" fill="#1e40af">Service discovery via WithReference()</text>
+      <text x="16" y="112" font-size="10" fill="#1e40af">OTel collector + dashboard on :15279</text>
+    </g>
+
+    <g transform="translate(20, 216)">
+      <rect width="380" height="70" rx="8" fill="#fbbf24"/>
+      <text x="16" y="22" font-size="13" font-weight="700" fill="#78350f">Live-reload rubrics</text>
+      <text x="16" y="40" font-size="10" fill="#78350f">AlwaysReloadFromDisk = true</text>
+      <text x="16" y="56" font-size="10" fill="#78350f">Edit skills/*.md → next turn sees the change</text>
+    </g>
+
+    <g transform="translate(20, 306)">
+      <rect width="380" height="70" rx="8" fill="#fce7f3"/>
+      <text x="16" y="22" font-size="13" font-weight="700" fill="#831843">Auth: AzureCliCredential</text>
+      <text x="16" y="40" font-size="10" fill="#831843">Picks up your az login token</text>
+      <text x="16" y="56" font-size="10" fill="#831843">Or OPENAI_API_KEY env var</text>
+    </g>
+
+    <g transform="translate(20, 396)">
+      <rect width="380" height="70" rx="8" fill="#e0e7ff"/>
+      <text x="16" y="22" font-size="13" font-weight="700" fill="#3730a3">Sessions: in-memory</text>
+      <text x="16" y="40" font-size="10" fill="#3730a3">InMemorySessionRepository (ConcurrentDictionary)</text>
+      <text x="16" y="56" font-size="10" fill="#3730a3">+ localStorage in the Blazor circuit for refresh-safety</text>
+    </g>
+
+    <g transform="translate(20, 486)">
+      <rect width="380" height="70" rx="8" fill="#dcfce7"/>
+      <text x="16" y="22" font-size="13" font-weight="700" fill="#065f46">Health probes</text>
+      <text x="16" y="40" font-size="10" fill="#065f46">/health, /alive mapped (Dev only)</text>
+      <text x="16" y="56" font-size="10" fill="#065f46">No external dependencies</text>
+    </g>
+
+    <g transform="translate(20, 576)">
+      <rect width="380" height="64" rx="8" fill="#0f172a"/>
+      <text x="190" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">Usage</text>
+      <text x="190" y="44" text-anchor="middle" font-size="10" fill="#cbd5e1">Blazor + DevUI + curl /api/express-pa</text>
+      <text x="190" y="56" text-anchor="middle" font-size="10" fill="#cbd5e1">15/15 unit tests · dashboard traces</text>
+    </g>
+  </g>
+
+  <!-- ============================ -->
+  <!-- ENVIRONMENT 2: DOCKER COMPOSE-->
+  <!-- ============================ -->
+  <g transform="translate(500, 140)">
+    <rect width="420" height="660" rx="12" fill="#ffffff" stroke="#fbbf24" stroke-width="2" filter="url(#shadow4)"/>
+    <text x="20" y="34" font-size="16" font-weight="700" fill="#78350f">2 · Docker (staging / on-prem)</text>
+    <text x="20" y="54" font-size="12" fill="#64748b">docker build · docker network · docker run</text>
+
+    <g transform="translate(20, 76)">
+      <rect width="380" height="120" rx="8" fill="#fef3c7" stroke="#fbbf24"/>
+      <text x="16" y="24" font-size="13" font-weight="700" fill="#78350f">Container network</text>
+      <rect x="16" y="36" width="160" height="40" rx="5" fill="#fbbf24"/>
+      <text x="96" y="54" text-anchor="middle" font-size="11" font-weight="700" fill="#78350f">agenticpa-mcp</text>
+      <text x="96" y="68" text-anchor="middle" font-size="9" fill="#78350f">:7070</text>
+      <rect x="200" y="36" width="160" height="40" rx="5" fill="#fbbf24"/>
+      <text x="280" y="54" text-anchor="middle" font-size="11" font-weight="700" fill="#78350f">agenticpa-web</text>
+      <text x="280" y="68" text-anchor="middle" font-size="9" fill="#78350f">:8080</text>
+      <text x="16" y="98" font-size="10" fill="#78350f">Multi-stage Dockerfiles · distroless aspnet</text>
+      <text x="16" y="112" font-size="10" fill="#78350f">USER app — non-root</text>
+    </g>
+
+    <g transform="translate(20, 216)">
+      <rect width="380" height="70" rx="8" fill="#fef3c7"/>
+      <text x="16" y="22" font-size="13" font-weight="700" fill="#78350f">Rubric refresh</text>
+      <text x="16" y="40" font-size="10" fill="#78350f">Nightly atomic swap (2–4 AM local)</text>
+      <text x="16" y="56" font-size="10" fill="#78350f">QuiescePeriod ≥ 60s — no swap during in-flight turns</text>
+    </g>
+
+    <g transform="translate(20, 306)">
+      <rect width="380" height="70" rx="8" fill="#fce7f3"/>
+      <text x="16" y="22" font-size="13" font-weight="700" fill="#831843">Auth: env var or vault</text>
+      <text x="16" y="40" font-size="10" fill="#831843">OPENAI_API_KEY via -e or .env</text>
+      <text x="16" y="56" font-size="10" fill="#831843">Or mount a Docker secret</text>
+    </g>
+
+    <g transform="translate(20, 396)">
+      <rect width="380" height="70" rx="8" fill="#e0e7ff"/>
+      <text x="16" y="22" font-size="13" font-weight="700" fill="#3730a3">Sessions: same (or Redis)</text>
+      <text x="16" y="40" font-size="10" fill="#3730a3">Swap ISessionRepository for Redis container</text>
+      <text x="16" y="56" font-size="10" fill="#3730a3">No code changes — just DI registration</text>
+    </g>
+
+    <g transform="translate(20, 486)">
+      <rect width="380" height="70" rx="8" fill="#dcfce7"/>
+      <text x="16" y="22" font-size="13" font-weight="700" fill="#065f46">Health probes (still on)</text>
+      <text x="16" y="40" font-size="10" fill="#065f46">Use ASPNETCORE_ENVIRONMENT=Staging</text>
+      <text x="16" y="56" font-size="10" fill="#065f46">or open /health behind ingress auth</text>
+    </g>
+
+    <g transform="translate(20, 576)">
+      <rect width="380" height="64" rx="8" fill="#0f172a"/>
+      <text x="190" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">Usage</text>
+      <text x="190" y="44" text-anchor="middle" font-size="10" fill="#cbd5e1">Two `docker run` commands</text>
+      <text x="190" y="56" text-anchor="middle" font-size="10" fill="#cbd5e1">CI builds and tags both images on every push</text>
+    </g>
+  </g>
+
+  <!-- ============================ -->
+  <!-- ENVIRONMENT 3: AZURE          -->
+  <!-- ============================ -->
+  <g transform="translate(940, 140)">
+    <rect width="400" height="660" rx="12" fill="#ffffff" stroke="#10b981" stroke-width="2" filter="url(#shadow4)"/>
+    <text x="20" y="34" font-size="16" font-weight="700" fill="#065f46">3 · Azure (production)</text>
+    <text x="20" y="54" font-size="12" fill="#64748b">azd up — from src/AgenticPA.AppHost</text>
+
+    <g transform="translate(20, 76)">
+      <rect width="360" height="160" rx="8" fill="#dcfce7" stroke="#10b981"/>
+      <text x="16" y="24" font-size="13" font-weight="700" fill="#065f46">Azure Container Apps</text>
+      <rect x="16" y="40" width="150" height="40" rx="5" fill="#10b981"/>
+      <text x="91" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">mcp container</text>
+      <text x="91" y="72" text-anchor="middle" font-size="9" fill="#ecfdf5">scale 1-N</text>
+      <rect x="190" y="40" width="150" height="40" rx="5" fill="#10b981"/>
+      <text x="265" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">web container</text>
+      <text x="265" y="72" text-anchor="middle" font-size="9" fill="#ecfdf5">scale 1-N</text>
+      <text x="16" y="106" font-size="10" fill="#065f46">Aspire emits the Bicep manifest;</text>
+      <text x="16" y="120" font-size="10" fill="#065f46">azd up provisions ACA, log analytics,</text>
+      <text x="16" y="134" font-size="10" fill="#065f46">container registry, and ingress.</text>
+      <text x="16" y="148" font-size="10" fill="#065f46">Service discovery: native via env vars.</text>
+    </g>
+
+    <g transform="translate(20, 256)">
+      <rect width="360" height="70" rx="8" fill="#fef3c7"/>
+      <text x="16" y="22" font-size="13" font-weight="700" fill="#78350f">Rubric refresh</text>
+      <text x="16" y="40" font-size="10" fill="#78350f">Same nightly window. Roll a new container</text>
+      <text x="16" y="56" font-size="10" fill="#78350f">to push major rubric changes intentionally.</text>
+    </g>
+
+    <g transform="translate(20, 346)">
+      <rect width="360" height="70" rx="8" fill="#fce7f3"/>
+      <text x="16" y="22" font-size="13" font-weight="700" fill="#831843">Auth: DefaultAzureCredential</text>
+      <text x="16" y="40" font-size="10" fill="#831843">Managed identity → Azure OpenAI</text>
+      <text x="16" y="56" font-size="10" fill="#831843">+ JWT/Entra ID on /api/* and /a2a/*</text>
+    </g>
+
+    <g transform="translate(20, 436)">
+      <rect width="360" height="70" rx="8" fill="#e0e7ff"/>
+      <text x="16" y="22" font-size="13" font-weight="700" fill="#3730a3">Sessions: Cosmos DB</text>
+      <text x="16" y="40" font-size="10" fill="#3730a3">CosmosSessionRepository (impl ISessionRepository)</text>
+      <text x="16" y="56" font-size="10" fill="#3730a3">Partition key = tenantId · TTL configurable</text>
+    </g>
+
+    <g transform="translate(20, 526)">
+      <rect width="360" height="50" rx="8" fill="#dcfce7"/>
+      <text x="16" y="22" font-size="13" font-weight="700" fill="#065f46">Observability</text>
+      <text x="16" y="40" font-size="10" fill="#065f46">OTel → App Insights via OTLP exporter</text>
+    </g>
+
+    <g transform="translate(20, 596)">
+      <rect width="360" height="44" rx="8" fill="#0f172a"/>
+      <text x="180" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">Usage</text>
+      <text x="180" y="36" text-anchor="middle" font-size="10" fill="#cbd5e1">azd up · azd deploy · azd monitor</text>
+    </g>
+  </g>
+
+  <!-- bottom callout: what doesn't change -->
+  <g transform="translate(60, 820)">
+    <rect width="1280" height="44" rx="10" fill="#0f172a" filter="url(#shadow4)"/>
+    <text x="640" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">What does NOT change across environments:</text>
+    <text x="640" y="36" text-anchor="middle" font-size="11" fill="#cbd5e1">Agent code · rubric files · MCP tools · workflows · tests · multi-surface endpoints — the same .NET 10 binary runs in all three.</text>
+  </g>
+
+  <text x="60" y="876" font-size="10" fill="#94a3b8">Diagram: agentic-pa-intake / 04-deployment</text>
+</svg>

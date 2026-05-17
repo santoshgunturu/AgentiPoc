@@ -20,10 +20,12 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped(sp => chatClientFactory(sp));
 
+        services.AddSingleton<ToolApprovalPolicy>();
         services.AddSingleton(sp =>
         {
             ILoggerFactory lf = sp.GetRequiredService<ILoggerFactory>();
-            return new McpToolClient(mcpEndpointFactory(sp), lf);
+            ToolApprovalPolicy policy = sp.GetRequiredService<ToolApprovalPolicy>();
+            return new McpToolClient(mcpEndpointFactory(sp), lf, policy);
         });
         services.AddSingleton<IRulesEngineClient>(sp => sp.GetRequiredService<McpToolClient>());
         services.AddSingleton(sp =>

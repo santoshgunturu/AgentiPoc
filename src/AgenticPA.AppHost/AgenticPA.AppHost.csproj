@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Sdk Name="Aspire.AppHost.Sdk" Version="13.2.4" />
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>4c2dd57b-2b6c-4e7c-8d5b-1a3e9f7b2e10</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AgenticPA.McpServer\AgenticPA.McpServer.csproj" />
+    <ProjectReference Include="..\AgenticPA.Web\AgenticPA.Web.csproj" />
+  </ItemGroup>
+
+</Project>

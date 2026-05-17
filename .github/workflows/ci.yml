@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore AgenticPA.slnx
+
+      - name: Build
+        run: dotnet build AgenticPA.slnx --configuration Release --no-restore
+
+      - name: Test
+        run: |
+          # Start MCP server for integration tests
+          dotnet run --project src/AgenticPA.McpServer --no-build --configuration Release &
+          MCP_PID=$!
+          sleep 8
+          dotnet test AgenticPA.slnx --configuration Release --no-build --logger "trx;LogFileName=tests.trx"
+          TEST_EXIT=$?
+          kill $MCP_PID || true
+          exit $TEST_EXIT
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: '**/TestResults/*.trx'
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: build-test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Web image
+        run: docker build -t agenticpa-web:${{ github.sha }} -f src/AgenticPA.Web/Dockerfile .
+
+      - name: Build MCP server image
+        run: docker build -t agenticpa-mcp:${{ github.sha }} -f src/AgenticPA.McpServer/Dockerfile .

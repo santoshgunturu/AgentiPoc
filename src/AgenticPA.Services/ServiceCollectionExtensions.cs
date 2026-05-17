@@ -17,6 +17,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IPolicyService, PolicyService>();
         services.AddSingleton<IAuditService, AuditService>();
         services.AddSingleton<IRulesEngine, RulesEngine>();
+        services.AddSingleton<Rag.IPolicyRagService, Rag.InMemoryPolicyRagService>();
         return services;
     }
 }

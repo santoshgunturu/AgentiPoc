@@ -2,6 +2,9 @@ using AgenticPA.Services;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+// Phase 6 — Aspire ServiceDefaults: OTel, resilience, health checks.
+builder.AddServiceDefaults();
+
 builder.Services.AddAgenticPaServices();
 
 builder.Services.AddMcpServer()
@@ -12,6 +15,7 @@ builder.WebHost.UseUrls("http://localhost:7070");
 
 WebApplication app = builder.Build();
 
+app.MapDefaultEndpoints();
 app.MapMcp();
 app.MapGet("/", () => "AgenticPA MCP server is running. MCP endpoint: /");
 

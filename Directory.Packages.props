@@ -3,16 +3,68 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
+
+  <!-- ASP.NET / Microsoft Extensions -->
   <ItemGroup>
-    <PackageVersion Include="Markdig" Version="0.38.0" />
-    <PackageVersion Include="Microsoft.Extensions.AI" Version="10.5.0" />
-    <PackageVersion Include="Microsoft.Extensions.AI.OpenAI" Version="10.5.0" />
+    <PackageVersion Include="Microsoft.Extensions.AI" Version="10.5.1" />
+    <PackageVersion Include="Microsoft.Extensions.AI.OpenAI" Version="10.5.1" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.7" />
     <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.7" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.7" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.7" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.5.0" />
+    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="10.5.0" />
+  </ItemGroup>
+
+  <!-- Microsoft Agent Framework (MAF) -->
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.Agents.AI" Version="1.6.0" />
+    <PackageVersion Include="Microsoft.Agents.AI.OpenAI" Version="1.6.0" />
+    <PackageVersion Include="Microsoft.Agents.AI.Hosting" Version="1.6.0-preview.260512.1" />
+    <PackageVersion Include="Microsoft.Agents.AI.Hosting.OpenAI" Version="1.6.0-alpha.260512.1" />
+    <PackageVersion Include="Microsoft.Agents.AI.Hosting.A2A.AspNetCore" Version="1.6.0-preview.260512.1" />
+    <PackageVersion Include="Microsoft.Agents.AI.DevUI" Version="1.6.0-preview.260512.1" />
+    <PackageVersion Include="Microsoft.Agents.AI.Workflows" Version="1.6.0" />
+  </ItemGroup>
+
+  <!-- Azure / OpenAI -->
+  <ItemGroup>
+    <PackageVersion Include="Azure.AI.OpenAI" Version="2.9.0-beta.1" />
+    <PackageVersion Include="Azure.Identity" Version="1.21.0" />
+  </ItemGroup>
+
+  <!-- MCP -->
+  <ItemGroup>
     <PackageVersion Include="ModelContextProtocol" Version="1.2.0" />
     <PackageVersion Include="ModelContextProtocol.AspNetCore" Version="1.2.0" />
+  </ItemGroup>
+
+  <!-- OpenTelemetry -->
+  <ItemGroup>
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.15.3" />
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.15.3" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.15.2" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.15.1" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.15.1" />
+  </ItemGroup>
+
+  <!-- UI / Misc -->
+  <ItemGroup>
+    <PackageVersion Include="Markdig" Version="0.38.0" />
+  </ItemGroup>
+
+  <!-- RAG -->
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.74.0-preview" />
+  </ItemGroup>
+
+  <!-- Aspire -->
+  <ItemGroup>
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.2.4" />
+  </ItemGroup>
+
+  <!-- Test packages -->
+  <ItemGroup>
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
     <PackageVersion Include="FluentAssertions" Version="6.12.1" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />

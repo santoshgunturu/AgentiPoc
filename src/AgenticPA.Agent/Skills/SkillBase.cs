@@ -1,6 +1,7 @@
 using System.Text.Json;
 using AgenticPA.Agent.Mcp;
 using AgenticPA.Agent.StateMachine;
+using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Logging;
 
@@ -22,6 +23,27 @@ public abstract class SkillBase : ISkill
         Logger = logger;
         RubricLoader = rubricLoader;
         InFlight = inFlight;
+    }
+
+    /// <summary>
+    /// Build a Microsoft Agent Framework <see cref="AIAgent"/> with the current rubric
+    /// as instructions and the whitelisted MCP tools attached.
+    /// Rebuilt on every call so dev-mode rubric reloads take effect immediately.
+    /// </summary>
+    protected virtual AIAgent BuildAgent()
+    {
+        IList<AITool>? tools = AllowedTools.Length == 0
+            ? null
+            : Mcp.ToolsNamed(AllowedTools).Cast<AITool>().ToList();
+
+        return new ChatClientAgent(
+            chatClient: ChatClient,
+            name: GetType().Name,
+            description: $"PA workflow skill: {Handles}",
+            instructions: ResolveSystemPrompt(),
+            tools: tools,
+            loggerFactory: null,
+            services: null);
     }
 
     public abstract PaState Handles { get; }
@@ -60,9 +82,14 @@ public abstract class SkillBase : ISkill
     {
         await Mcp.EnsureConnectedAsync(ct);
 
+        // Build the MAF agent fresh (so live-reloaded rubrics take effect).
+        AIAgent agent = BuildAgent();
+
+        // Compose the per-turn message list: context hint as a system addendum,
+        // plus the prior transcript (user/assistant), plus the current user message.
         List<ChatMessage> messages = new()
         {
-            new ChatMessage(ChatRole.System, ResolveSystemPrompt() + "\n\n" + ContextHint(ctx))
+            new ChatMessage(ChatRole.System, ContextHint(ctx))
         };
         foreach (ChatTurn turn in transcript)
         {
@@ -73,15 +100,8 @@ public abstract class SkillBase : ISkill
         }
         messages.Add(new ChatMessage(ChatRole.User, userMessage));
 
-        ChatOptions options = new()
-        {
-            Tools = AllowedTools.Length == 0
-                ? null
-                : Mcp.ToolsNamed(AllowedTools).Cast<AITool>().ToList()
-        };
-
         using IDisposable? lease = InFlight?.BeginTurn();
-        ChatResponse response = await ChatClient.GetResponseAsync(messages, options, cancellationToken: ct);
+        AgentResponse response = await agent.RunAsync(messages, cancellationToken: ct);
         string fullText = response.Text ?? string.Empty;
 
         (string reply, IWorkflowCommand? cmd) = ExtractCommand(fullText, ctx);

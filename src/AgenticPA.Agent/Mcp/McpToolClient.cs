@@ -22,19 +22,38 @@ public class McpToolClient : IAsyncDisposable, IRulesEngineClient
     private McpClient? _client;
     private IReadOnlyList<McpClientTool>? _tools;
 
-    public McpToolClient(Uri endpoint, ILoggerFactory loggerFactory)
+    private readonly ToolApprovalPolicy? _approvalPolicy;
+
+    public McpToolClient(Uri endpoint, ILoggerFactory loggerFactory, ToolApprovalPolicy? approvalPolicy = null)
     {
         _endpoint = endpoint;
         _loggerFactory = loggerFactory;
         _logger = loggerFactory.CreateLogger<McpToolClient>();
+        _approvalPolicy = approvalPolicy;
     }
 
     public IReadOnlyList<AIFunction> AllTools => (IReadOnlyList<AIFunction>?)_tools ?? Array.Empty<AIFunction>();
 
+    /// <summary>
+    /// Return the named tools, wrapping any that the approval policy flags so
+    /// the LLM cannot invoke them without an explicit human approval.
+    /// </summary>
     public IReadOnlyList<AIFunction> ToolsNamed(params string[] names)
     {
         HashSet<string> allow = new(names, StringComparer.OrdinalIgnoreCase);
-        return AllTools.Where(t => allow.Contains(t.Name)).ToList();
+        List<AIFunction> result = new();
+        foreach (AIFunction tool in AllTools.Where(t => allow.Contains(t.Name)))
+        {
+            if (_approvalPolicy is not null && _approvalPolicy.ShouldApprove(tool.Name))
+            {
+                result.Add(new ApprovalRequiredAIFunction(tool));
+            }
+            else
+            {
+                result.Add(tool);
+            }
+        }
+        return result;
     }
 
     public async Task EnsureConnectedAsync(CancellationToken ct = default)

@@ -2,14 +2,24 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AgenticPA.Agent\AgenticPA.Agent.csproj" />
+    <ProjectReference Include="..\AgenticPA.Services\AgenticPA.Services.csproj" />
+    <ProjectReference Include="..\AgenticPA.ServiceDefaults\AgenticPA.ServiceDefaults.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\data\*.json" CopyToOutputDirectory="PreserveNewest" Link="Data\%(Filename)%(Extension)" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Markdig" />
+    <PackageReference Include="Microsoft.Agents.AI.Hosting" />
+    <PackageReference Include="Microsoft.Agents.AI.Hosting.OpenAI" />
+    <PackageReference Include="Microsoft.Agents.AI.Hosting.A2A.AspNetCore" />
+    <PackageReference Include="Microsoft.Agents.AI.DevUI" />
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>ecc09bb3-4778-4bea-9963-0f081ebac0e9</UserSecretsId>

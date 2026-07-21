@@ -1,0 +1,123 @@
+Here's the current ER diagram matching the architecture document (11 tables, no FHIR, no mapping table):
+
+```mermaid
+erDiagram
+    CMS_Questionnaires ||--o{ CMS_QuestionnaireVersions : "has versions"
+    CMS_QuestionnaireVersions ||--o{ CMS_Questions : "contains"
+    CMS_QuestionCategories ||--o{ CMS_Questions : "categorizes"
+    CMS_QuestionTypes ||--o{ CMS_Questions : "types"
+    CMS_Questions ||--o{ CMS_QuestionOptions : "offers"
+    CMS_Questions ||--o{ CMS_RuleGroups : "gated by"
+    CMS_RuleGroups ||--o{ CMS_QuestionRules : "evaluates"
+    CMS_QuestionOptions ||--o{ CMS_QuestionRules : "trigger option"
+    CMS_QuestionnaireVersions ||--o{ CMS_Cases : "pinned by"
+    CMS_Cases ||--o{ CMS_CaseAnswers : "collects"
+    CMS_Questions ||--o{ CMS_CaseAnswers : "answers"
+    CMS_CaseAnswers ||--o{ CMS_CaseAnswerOptions : "selected options"
+    CMS_QuestionOptions ||--o{ CMS_CaseAnswerOptions : "references"
+    CMS_Cases ||--o{ CMS_CaseAttachments : "attaches"
+
+    CMS_Questionnaires {
+        int QuestionnaireID PK
+        varchar Name
+        bit IsActive
+    }
+    CMS_QuestionnaireVersions {
+        int QuestionnaireVersionID PK
+        int QuestionnaireID FK
+        varchar VersionString
+        varchar Status "Draft|Published|Retired"
+    }
+    CMS_QuestionCategories {
+        int CategoryID PK
+        varchar CategoryName
+        int DisplayOrder
+    }
+    CMS_QuestionTypes {
+        int TypeID PK
+        varchar TypeName "Text|Boolean|Numeric|Date|SingleChoice|MultiChoice"
+    }
+    CMS_Questions {
+        int QuestionID PK
+        int QuestionnaireVersionID FK
+        int CategoryID FK
+        int TypeID FK
+        varchar QuestionCode "stable across versions"
+        nvarchar QuestionText
+        bit Repeats
+        int DisplayOrder
+        decimal MinNumericValue
+        decimal MaxNumericValue
+    }
+    CMS_QuestionOptions {
+        int OptionID PK
+        int QuestionID FK
+        nvarchar OptionText
+        int DisplayOrder
+    }
+    CMS_RuleGroups {
+        int GroupID PK
+        int TargetQuestionID FK
+        varchar LogicalOperator "AND|OR"
+    }
+    CMS_QuestionRules {
+        int RuleID PK
+        int GroupID FK
+        int ParentQuestionID FK
+        varchar Operator "EQ NEQ GT GTE LT LTE EXISTS"
+        int TriggerOptionID FK
+        bit TriggerBooleanValue
+        nvarchar TriggerTextValue
+        decimal TriggerNumericValue
+        date TriggerDateValue
+    }
+    CMS_Cases {
+        int CaseID PK
+        varchar CaseNumber UK
+        varchar MemberID
+        varchar EnrollmentID
+        varchar ProcedureCode
+        varchar PrimaryDiagnosisCode
+        varchar OrderingProviderNPI
+        bit IsExpedited
+        int QuestionnaireVersionID FK
+        varchar Status
+        datetime2 ReceivedDateTime
+        datetime2 DecisionDueDateTime "72h or 7d SLA"
+        rowversion RowVersion
+        datetime2 ValidFrom "temporal"
+        datetime2 ValidTo "temporal"
+    }
+    CMS_CaseAnswers {
+        int AnswerID PK
+        int CaseID FK
+        int QuestionID FK
+        int RepeatIndex
+        nvarchar TextAnswer
+        bit BooleanAnswer
+        decimal NumericAnswer
+        date DateAnswer
+        varchar Source "UserEntered|Prepopulated|AgentSuggested"
+        bit IsInvalidated "soft delete only"
+        varchar InvalidatedReason
+        nvarchar UpdatedBy
+        datetime2 ValidFrom "temporal"
+        datetime2 ValidTo "temporal"
+    }
+    CMS_CaseAnswerOptions {
+        int CaseAnswerOptionID PK
+        int AnswerID FK
+        int OptionID FK
+    }
+    CMS_CaseAttachments {
+        int AttachmentID PK
+        int CaseID FK
+        int QuestionID FK "nullable"
+        nvarchar FileName
+        nvarchar BlobStorageUri
+        varbinary ContentHash "SHA-256"
+        bit IsDeleted
+    }
+```
+
+One addition from earlier iterations: I fleshed out `CMS_QuestionCategories` and `CMS_QuestionTypes` with their attribute blocks, since they'd been referenced in relationships but never defined — the diagram is now complete for all 11 tables. Paste it into mermaid.live or Azure DevOps wiki (both render `erDiagram` natively), and it can go straight into the architecture doc's Section 4 as a rendered image if your architect prefers a picture over the table.
